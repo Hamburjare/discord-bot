@@ -1,0 +1,26 @@
+{
+    "alrooli":"692742714537803876",
+    "servunnimi" : "EskoLaLaLand",
+    "hylattywlhakemusotsikko": "Hakemuksesi on hylätty!",
+    "hylattywlhakemus": "Kannattaa lukea ohjeet huolellisesti seuraavaa hakemusta varten, sekä tehdä hakemus ajatuksen kanssa! \n Onnea seuraavan hakemuksen tekoon.",
+    "hyvaksyttywlhakemusotsikko": "Hakemuksesi on hyväksytty!",
+    "hyvaksyttywlhakemus": "Luethan ohjeet sekä säännöt huolellisesti! \n Mukavia RP hetkiä!",
+    "vaarachannelihakemuksenhyvaksymiselle": "Väärä kanava hakemusten hyväksymiselle",
+    "lahtevathakemuksetkanava" : "737975745590067262",
+    "prefix": "!",
+    "whitelist_sanat" : ["Steam:", "OOC:", "IC:"],
+    "botti_tiedot" : {
+        "nimi" : "Anna Banana",
+        "kuva" : "https://i.imgur.com/XU7gNvz.png"
+    },
+    "tulevathakemukset": "827881373842669568",
+    "paatoschannel": "898916376440348692",
+    "ehdotuschannel": "899256332694208542",
+    "variroolichannel": "899594138419363940",
+    "nimenvaihtochannel": "899601203510509628",
+    "tervetuloachannel": "827588408083611719",
+    "logiachannel": "902888726462615583",
+    "messages": {
+		"COOLDOWN_MESSAGE": "You are on `<duration>` cooldown!"
+	}
+}
