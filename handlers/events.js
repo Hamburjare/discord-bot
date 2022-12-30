@@ -9,5 +9,5 @@ module.exports = (client) => {
       	require(`../events/${event}`);
 	table.addRow(event.split('.js')[0], '✅')
     })
-	console.log(chalk.greenBright(table.toString()))//skipcq: PYL-JS-0002
+	console.log(chalk.greenBright(table.toString()))
 };

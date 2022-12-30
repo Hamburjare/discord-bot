@@ -39,7 +39,7 @@ module.exports = (client) => {
 		}
 		
 	});
-	console.log(chalk.red(table.toString())); //skipcq: PYL-JS-0002
+	console.log(chalk.red(table.toString()));
 
 	(async () => {
 			try {
@@ -49,7 +49,7 @@ module.exports = (client) => {
 					Routes.applicationCommands(CLIENT_ID), 
 					{ body: slashCommands }
 				);
-				console.log(chalk.yellow('Slash Commands • Registered')) //skipcq: PYL-JS-0002
+				console.log(chalk.yellow('Slash Commands • Registered'))
 			} catch (error) {
 				console.log(error);
 			}
