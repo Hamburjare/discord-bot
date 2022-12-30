@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  discord-botti:
+  back-tier:
     driver: bridge
 
 services:
@@ -9,17 +9,15 @@ services:
     image: mysql
     container_name: db
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: HamburjareDB
-      MYSQL_USER: hamburjare
-      MYSQL_PASSWORD: hamburjare
+      MYSQL_ROOT_PASSWORD: Abc123
+      MYSQL_DATABASE: discord-bot
     ports:
       - '3306:3306'
     volumes:
       - dbdata:/var/lib/mysql
     restart: unless-stopped
     networks:
-      - discord-botti
+      - back-tier
 
   phpmyadmin:
     image: phpmyadmin
@@ -29,22 +27,21 @@ services:
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
-      # PMA_ARBITRARY: 1
     restart: unless-stopped
     ports:
       - 8081:80
     networks:
-      - discord-botti
+      - back-tier
     
   app:
     build: .
+    container_name: discord-bot
     depends_on:
       - db
     env_file: .env
     restart: unless-stopped
     networks:
-      - discord-botti
+      - back-tier
     
 volumes:
   dbdata:
-
