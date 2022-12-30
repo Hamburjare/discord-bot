@@ -97,10 +97,9 @@ docker-compose down
     ],
    ```
    6. Put the code you want to execute when the command is called in the `run` function 
-   <br>
-   [Discord.js documentation](https://discord.js.org/#/docs/discord.js/main/general/welcome)
-   <br>
-   [Discord.js Guide](https://discordjs.guide/#before-you-begin)
-   <br>
+   
+      [Discord.js documentation](https://discord.js.org/#/docs/discord.js/main/general/welcome)
+      
+      [Discord.js Guide](https://discordjs.guide/#before-you-begin)
    7. Save the file
    8. Restart the bot to apply the changes (see [Usage](#usage) step 1)
