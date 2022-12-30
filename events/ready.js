@@ -11,5 +11,5 @@ client.on("ready", () => {
 	});
 
 
-	console.log(chalk.red(`Logged in as ${client.user.tag}!`)) //skipcq: PYL-JS-0002
+	console.log(chalk.red(`Logged in as ${client.user.tag}!`))
 });
