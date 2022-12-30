@@ -69,24 +69,25 @@ docker-compose down
 3. To add new commands
    1. Create new file in `commands` directory
    2. Copy the following code to the file
-```js
-const { EmbedBuilder, ApplicationCommandType } = require('discord.js');
-module.exports = {
-    name: '',
-    description: "",
-    type: ApplicationCommandType.ChatInput,
-    
+
+   ```js
+   const { EmbedBuilder, ApplicationCommandType } = require('discord.js');
+   module.exports = {
+      name: '',
+      description: "",
+      type: ApplicationCommandType.ChatInput,
+      
 
 
-    run: async (client, interaction) => {
+      run: async (client, interaction) => {
 
-    }
+      }
 
-};
-```
+   };
+   ```
    3. Replace `name` with the name of the command
    4. Replace `description` with the description of the command
-   5. Add options if you want to
+   5. Add options if you want to under `type`
    ```js 
    options: [
         {
