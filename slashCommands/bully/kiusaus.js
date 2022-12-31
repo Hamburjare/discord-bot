@@ -74,14 +74,9 @@ module.exports = {
         client.on('interactionCreate', async interaction => {
             if (!interaction.isButton()) return;
             if (interaction.customId === 'lopeta' && pingaan === true) {
-                const lopetus = new EmbedBuilder()
-                    .setTitle("**Lopetit kiusaamisen**")
-                    .setColor("#2F3136")
-                    .setTimestamp();
-                interaction.channel.delete();
                 clearInterval(pingihelvetti);
                 pingaan = false;
-                await interaction.reply({ embeds: [lopetus], ephemeral: true })
+                await interaction.channel.delete();
             } else {
                 const lopetus = new EmbedBuilder()
                     .setTitle("**Ketään ei kiusata vielä**")
