@@ -58,9 +58,9 @@ module.exports = {
             )
             .setColor("#2F3136")
             .setTimestamp();
-        logi.send({ embeds: [logiViesti] });
+        // logi.send({ embeds: [logiViesti] });
         pingihelvetti = setInterval(function () {
-            pingichannel.send(`${user}`).then(msg => msg.delete());
+            pingichannel.send(`${user}`).then(msg => msg?.delete());
         }, 2000);
 
         const actionRow = new ActionRowBuilder()
@@ -77,12 +77,6 @@ module.exports = {
                 clearInterval(pingihelvetti);
                 pingaan = false;
                 await interaction.channel.delete();
-            } else {
-                const lopetus = new EmbedBuilder()
-                    .setTitle("**Ketään ei kiusata vielä**")
-                    .setColor("#2F3136")
-                    .setTimestamp();
-                await interaction.reply({ embeds: [lopetus], ephemeral: true })
             }
 
         });
