@@ -58,7 +58,7 @@ module.exports = {
             )
             .setColor("#2F3136")
             .setTimestamp();
-        // logi.send({ embeds: [logiViesti] });
+        logi.send({ embeds: [logiViesti] });
         pingihelvetti = setInterval(function () {
             pingichannel.send(`${user}`).then(msg => msg?.delete());
         }, 2000);
