@@ -148,21 +148,21 @@ module.exports = {
 
         if (liha !== undefined && vege !== undefined && dessert !== undefined) {
             embed.addFields(
-                { name: 'Miesten ruokaa', value: `${liha.join("\n")}`, inline: true },
-                { name: 'Vegaanista paskaa', value: `${vege.join("\n")}`, inline: true },
-                { name: 'Jälkiruokana', value: `${dessert.join("\n")}}`, inline: true }
+                { name: 'Liha', value: `${liha.join("\n")}`, inline: true },
+                { name: 'Kasvis', value: `${vege.join("\n")}`, inline: true },
+                { name: 'Jälkiruoka', value: `${dessert.join("\n")}}`, inline: true }
             )
         } else if (liha !== undefined && vege !== undefined && dessert === undefined) {
             embed.addFields(
-                { name: 'Miesten ruokaa', value: `${liha.join("\n")}`, inline: true },
-                { name: 'Vegaanista paskaa', value: `${vege.join("\n")}`, inline: true },
+                { name: 'Liha', value: `${liha.join("\n")}`, inline: true },
+                { name: 'Kasvis', value: `${vege.join("\n")}`, inline: true },
             )
         }
         else {
             embed.addFields(
-                { name: 'Miesten ruokaa', value: `Ruokalistaa ei ole saatavilla`, inline: true },
-                { name: 'Vegaanista paskaa', value: `Ruokalistaa ei ole saatavilla (voi harmi)`, inline: true },
-                { name: 'Jälkiruokana', value: `Ruokalistaa ei ole saatavilla`, inline: true }
+                { name: 'Liha', value: `Ruokalistaa ei ole saatavilla`, inline: true },
+                { name: 'Kasvis', value: `Ruokalistaa ei ole saatavilla`, inline: true },
+                { name: 'Jälkiruoka', value: `Ruokalistaa ei ole saatavilla`, inline: true }
             )
         }
         // let color = Math.floor(Math.random() * colors.length + 1);
