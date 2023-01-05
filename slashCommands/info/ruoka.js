@@ -113,7 +113,7 @@ module.exports = {
 
 
     run: async (client, interaction) => {
-        const ruokalista = await fetch('https://www.foodandco.fi/modules/json/json/Index?costNumber=0083&language=fi');
+        const ruokalista = await fetch('https://www.compass-group.fi/menuapi/feed/json?costNumber=0083&language=fi');
         const data = await ruokalista.json();
 
         for (let i = 0; i < data.MenusForDays.length; i++) {
