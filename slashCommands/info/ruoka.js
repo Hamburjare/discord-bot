@@ -117,17 +117,15 @@ module.exports = {
         const data = await ruokalista.json();
 
         for (let i = 0; i < data.MenusForDays.length; i++) {
-            if (data.MenusForDays[i].Date === currentDate() + 'T00:00:00+00:00') {
-                vege = data.MenusForDays[i].SetMenus[1]?.Components;
-                liha = data.MenusForDays[i].SetMenus[2]?.Components;
-                dessert = data.MenusForDays[i].SetMenus[3]?.Components;
-
+            if (data.MenusForDays[i].Date === currentDate() + 'T00:00:00\u002B00:00') {
+                vege = data.MenusForDays[i].SetMenus[0]?.Components;
+                liha = data.MenusForDays[i].SetMenus[1]?.Components;
+                dessert = data.MenusForDays[i].SetMenus[2]?.Components;
             }
         }
 
         if (interaction.options.getBoolean('kuvat') === true) {
             if (liha !== undefined && lihaPhotos.length < 1) {
-
                 getPhotosFromGoogle("liha");
             }
             if (vege !== undefined && vegePhotos.length < 1) {
