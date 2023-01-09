@@ -113,21 +113,19 @@ module.exports = {
 
 
     run: async (client, interaction) => {
-        const ruokalista = await fetch('https://www.foodandco.fi/modules/json/json/Index?costNumber=0083&language=fi');
+        const ruokalista = await fetch('https://www.compass-group.fi/menuapi/feed/json?costNumber=0083&language=fi');
         const data = await ruokalista.json();
 
         for (let i = 0; i < data.MenusForDays.length; i++) {
-            if (data.MenusForDays[i].Date === currentDate() + 'T00:00:00+00:00') {
-                vege = data.MenusForDays[i].SetMenus[1]?.Components;
-                liha = data.MenusForDays[i].SetMenus[2]?.Components;
-                dessert = data.MenusForDays[i].SetMenus[3]?.Components;
-
+            if (data.MenusForDays[i].Date === currentDate() + 'T00:00:00\u002B00:00') {
+                vege = data.MenusForDays[i].SetMenus[0]?.Components;
+                liha = data.MenusForDays[i].SetMenus[1]?.Components;
+                dessert = data.MenusForDays[i].SetMenus[2]?.Components;
             }
         }
 
         if (interaction.options.getBoolean('kuvat') === true) {
             if (liha !== undefined && lihaPhotos.length < 1) {
-
                 getPhotosFromGoogle("liha");
             }
             if (vege !== undefined && vegePhotos.length < 1) {
@@ -148,21 +146,21 @@ module.exports = {
 
         if (liha !== undefined && vege !== undefined && dessert !== undefined) {
             embed.addFields(
-                { name: 'Miesten ruokaa', value: `${liha.join("\n")}`, inline: true },
-                { name: 'Vegaanista paskaa', value: `${vege.join("\n")}`, inline: true },
-                { name: 'Jälkiruokana', value: `${dessert.join("\n")}}`, inline: true }
+                { name: 'Liha', value: `${liha.join("\n")}`, inline: true },
+                { name: 'Kasvis', value: `${vege.join("\n")}`, inline: true },
+                { name: 'Jälkiruoka', value: `${dessert.join("\n")}}`, inline: true }
             )
         } else if (liha !== undefined && vege !== undefined && dessert === undefined) {
             embed.addFields(
-                { name: 'Miesten ruokaa', value: `${liha.join("\n")}`, inline: true },
-                { name: 'Vegaanista paskaa', value: `${vege.join("\n")}`, inline: true },
+                { name: 'Liha', value: `${liha.join("\n")}`, inline: true },
+                { name: 'Kasvis', value: `${vege.join("\n")}`, inline: true },
             )
         }
         else {
             embed.addFields(
-                { name: 'Miesten ruokaa', value: `Ruokalistaa ei ole saatavilla`, inline: true },
-                { name: 'Vegaanista paskaa', value: `Ruokalistaa ei ole saatavilla (voi harmi)`, inline: true },
-                { name: 'Jälkiruokana', value: `Ruokalistaa ei ole saatavilla`, inline: true }
+                { name: 'Liha', value: `Ruokalistaa ei ole saatavilla`, inline: true },
+                { name: 'Kasvis', value: `Ruokalistaa ei ole saatavilla`, inline: true },
+                { name: 'Jälkiruoka', value: `Ruokalistaa ei ole saatavilla`, inline: true }
             )
         }
         // let color = Math.floor(Math.random() * colors.length + 1);
