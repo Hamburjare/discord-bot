@@ -118,9 +118,9 @@ module.exports = {
 
         for (let i = 0; i < data.MenusForDays.length; i++) {
             if (data.MenusForDays[i].Date === currentDate() + 'T00:00:00\u002B00:00') {
-                vege = data.MenusForDays[i].SetMenus[0]?.Components;
-                liha = data.MenusForDays[i].SetMenus[1]?.Components;
-                dessert = data.MenusForDays[i].SetMenus[2]?.Components;
+                vege = data.MenusForDays[i].SetMenus[2]?.Components;
+                liha = data.MenusForDays[i].SetMenus[3]?.Components;
+                dessert = data.MenusForDays[i].SetMenus[5]?.Components;
             }
         }
 
