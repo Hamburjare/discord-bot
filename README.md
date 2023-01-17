@@ -53,17 +53,17 @@ DATABASE=mysql://<Password>:root@localhost:3306/discord-bot
 
 10. To start the bot run the following command in the root directory of the project
 ```bash
-docker-compose up -d --no-deps --build
+docker compose up -d --no-deps --build
 ```
 
 ## Usage
 1. To restart the bot run the following command in the root directory of the project
 ```bash
-docker-compose up -d --no-deps --build
+docker compose up -d --no-deps --build
 ```
 2. To stop the bot run the following command in the root directory of the project
 ```bash
-docker-compose down
+docker compose down
 ```
 3. To add new commands
    1. Create new file in `commands` directory
