@@ -20,7 +20,7 @@
 TOKEN=
 CLIENT_ID=
 GOOGLE_API=
-DATABASE=mysql://<Password>:root@localhost:3306/discord-bot
+DATABASE=mysql://root:<Password>@localhost:3306/discord-bot
 ```
 6. Replace `<Password>` with the password you created in step 4.1
 7. Create discord application and bot
