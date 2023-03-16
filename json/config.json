@@ -5,5 +5,9 @@
     },
     "messages": {
 		"COOLDOWN_MESSAGE": "You are on `<duration>` cooldown!"
-	}
+	},
+    "kiusaus": {
+        "CATEGORY": "1058507473830543480",
+        "LOG_CHANNEL": "1058501839055757312"
+    }
 }
