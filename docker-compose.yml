@@ -6,32 +6,15 @@ networks:
 
 services:
   db:
-    image: mysql
-    container_name: db
-    environment:
-      MYSQL_ROOT_PASSWORD: Abc123
-      MYSQL_DATABASE: discord-bot
-    ports:
-      - '3306:3306'
+    image: mongodb
+    container_name: mongodb
+    restart: unless-stopped
     volumes:
-      - dbdata:/var/lib/mysql
-    restart: unless-stopped
+      - dbdata:/data/db
     networks:
       - back-tier
-
-  phpmyadmin:
-    image: phpmyadmin
-    container_name: pma
-    links:
-      - db
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-    restart: unless-stopped
     ports:
-      - 8081:80
-    networks:
-      - back-tier
+      - 27017:27017
     
   app:
     build: .

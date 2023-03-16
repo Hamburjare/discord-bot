@@ -1,6 +1,7 @@
+require('dotenv').config()
 const { Client, GatewayIntentBits, Partials, Collection} = require('discord.js');
-const Keyv = require('keyv');
-const keyv = new Keyv(process.env.DATABASE);
+const { MongoClient } = require('mongodb');
+const DBclient = new MongoClient(process.env.MONGODB_URI);
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds, 
@@ -17,18 +18,16 @@ const client = new Client({
 });
 
 const config = require('./json/config.json');
-require('dotenv').config() // remove this line if you are using replit
 
 client.commands = new Collection()
 client.aliases = new Collection()
 client.slashCommands = new Collection();
-module.exports = client;
+module.exports = { client, DBclient};
 
 
 ['slashCommand', 'events'].forEach((handler) => {
   require(`./handlers/${handler}`)(client)
 });
 
-keyv.on('error', err => console.error('Keyv connection error:', err));
 
 client.login(process.env.TOKEN)

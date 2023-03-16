@@ -1,6 +1,6 @@
 const { EmbedBuilder, Collection, PermissionsBitField } = require('discord.js')
 const ms = require('ms');
-const client = require('..');
+const {client, DBclient} = require('..');
 const config = require('../json/config.json');
 
 const prefix = client.prefix;
