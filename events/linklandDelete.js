@@ -10,10 +10,10 @@ client.on("messageCreate", async (msg) => {
       const collection = database.collection("server-config");
       const filter = { _id: msg.guild.id };
 
-
-
       const result = await collection.findOne(filter);
+
       if (result) {
+
         const channel = client.channels.cache.get(result.linkland["channelID"]);
         var found = false;
 
@@ -32,6 +32,7 @@ client.on("messageCreate", async (msg) => {
         channel.send(`${msg.author} ***laittama viesti***: ${msg.content}`);
 
       };
+
     }
     catch (err) {
       console.log(err.stack);
@@ -40,19 +41,5 @@ client.on("messageCreate", async (msg) => {
       await DBclient.close();
     }
   }
-
-
-  // if (
-  //   msg.guild.id === "692296062924488714" ||
-  //   msg.content.includes("https://streamable") ||
-  //   msg.channel.id === "872128881979707483" ||
-  //   msg.content.includes("https://tenor.com") ||
-  //   msg.content.includes("https://cdn.discordapp.com/attachments/") ||
-  //   msg.channel.id === "784453087158861864" ||
-  //   msg.content.includes("https://medal.tv/") || msg.content.includes("https://youtu.be/")
-  // )
-  //   return;
-
-
 
 });
