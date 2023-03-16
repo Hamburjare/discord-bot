@@ -4,7 +4,6 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelect
 client.on("interactionCreate", async (interaction) => {
     if (!interaction.isStringSelectMenu()) return;
     try {
-        DBclient.connect();
         const database = DBclient.db("HamburjareDB");
         const collection = database.collection("server-config");
         const filter = { _id: interaction.guild.id };
@@ -154,29 +153,6 @@ client.on("interactionCreate", async (interaction) => {
     catch (err) {
         console.log(err.stack);
     }
-    finally {
-        DBclient.close();
-    }
-
-});
-
-client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isStringSelectMenu()) return;
-    try {
-        DBclient.connect();
-        const database = DBclient.db("HamburjareDB");
-        const collection = database.collection("server-config");
-        const filter = { _id: interaction.guild.id };
-        const result = await collection.findOne(filter);
-        if (interaction.customId === 'settings') {
-            
-        }
-    }
-    catch (err) {
-        console.log(err.stack);
-    }
-    finally {
-        DBclient.close();
-    }
+    
 
 });

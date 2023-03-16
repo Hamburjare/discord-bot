@@ -2,6 +2,7 @@ require('dotenv').config()
 const { Client, GatewayIntentBits, Partials, Collection} = require('discord.js');
 const { MongoClient } = require('mongodb');
 const DBclient = new MongoClient(process.env.MONGODB_URI);
+DBclient.connect();
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds, 
