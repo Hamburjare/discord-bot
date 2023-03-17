@@ -26,76 +26,80 @@ module.exports = {
             pingaan = true;
 
             // let pingichannel = interaction.guild.channels.cache.get("819875691306811403");
-        let pingichannel = await createChannel(interaction.guild, `kiusaus-kannu` , [
-            {
-                id: interaction.guild.id,
-                deny: [PermissionsBitField.Flags.ViewChannel],
-            },
-            {
-                id: user,
-                allow: [PermissionsBitField.Flags.ViewChannel],
-            },
-        ]);
-        await pingichannel.setParent(config.kiusaus["CATEGORY"], { lockPermissions: false });
+            let pingichannel = await createChannel(interaction.guild, `kiusaus-kannu`, [
+                {
+                    id: interaction.guild.id,
+                    deny: [PermissionsBitField.Flags.ViewChannel],
+                },
+                {
+                    id: user,
+                    allow: [PermissionsBitField.Flags.ViewChannel],
+                },
+            ]);
+            await pingichannel.setParent(config.kiusaus["CATEGORY"], { lockPermissions: false });
 
-        const viesti = new EmbedBuilder()
-            .setTitle("**Sinua kiusataan**")
-            .setColor("#2F3136")
-            .setTimestamp();
+            const viesti = new EmbedBuilder()
+                .setTitle("**Sinua kiusataan**")
+                .setColor("#2F3136")
+                .setTimestamp();
 
-        const viestiSecret = new EmbedBuilder()
-            .setTitle("**Kiusaus aloitettu**")
-            .setDescription(
-                `${user}`)
-            .setColor("#2F3136")
-            .setTimestamp();
+            const viestiSecret = new EmbedBuilder()
+                .setTitle("**Kiusaus aloitettu**")
+                .setDescription(
+                    `${user}`)
+                .setColor("#2F3136")
+                .setTimestamp();
 
 
-        const logiViesti = new EmbedBuilder()
-            .setTitle("**Kiusaus alkanut**")
-            .setDescription(
-                `${bully} kiusaa: ${user}`
-            )
-            .setColor("#2F3136")
-            .setTimestamp();
-        logi.send({ embeds: [logiViesti] });
-        pingihelvetti = setInterval(function () {
-            pingichannel.send(`${user}`).then(msg => msg?.delete());
-        }, 2000);
+            const logiViesti = new EmbedBuilder()
+                .setTitle("**Kiusaus alkanut**")
+                .setDescription(
+                    `${bully} kiusaa: ${user}`
+                )
+                .setColor("#2F3136")
+                .setTimestamp();
+            logi.send({ embeds: [logiViesti] });
+            pingihelvetti = setInterval(function () {
+                pingichannel.send(`${user}`).then(msg => msg.delete().catch(console.error));
+            }, 2000);
 
-        const actionRow = new ActionRowBuilder()
-            .addComponents([
-                new ButtonBuilder()
-                    .setCustomId('lopeta')
-                    .setLabel('Lopeta')
-                    .setStyle(ButtonStyle.Danger)
-            ])
+            const actionRow = new ActionRowBuilder()
+                .addComponents([
+                    new ButtonBuilder()
+                        .setCustomId('lopeta')
+                        .setLabel('Lopeta')
+                        .setStyle(ButtonStyle.Danger)
+                ])
 
-        client.on('interactionCreate', async interaction => {
-            if (!interaction.isButton()) return;
-            if (interaction.customId === 'lopeta' && pingaan === true) {
-                clearInterval(pingihelvetti);
-                pingaan = false;
-                await interaction.channel.delete();
-            }
+            client.on('interactionCreate', async interaction => {
+                if (!interaction.isButton()) return;
+                if (interaction.customId === 'lopeta' && pingaan === true) {
+                    clearInterval(pingihelvetti);
+                    pingaan = false;
+                    await interaction.channel.delete();
+                }
 
-        });
+            });
 
-        await interaction.reply({ embeds: [viestiSecret], ephemeral: true })
+            await interaction.reply({ embeds: [viestiSecret], ephemeral: true })
 
-        await pingichannel.send({ embeds: [viesti], components: [actionRow] })
+            await pingichannel.send({ embeds: [viesti], components: [actionRow] })
+
+            return
+
+        }
+
+        if (pingaan === true) {
+            const errorMessage = new EmbedBuilder()
+                .setTitle("**Jotakin kiusataan jo**")
+                .setDescription(
+                    `Yritä myöhemmin uudelleen`)
+                .setColor("#2F3136")
+                .setTimestamp();
+            await interaction.reply({ embeds: [errorMessage], ephemeral: true })
+        }
 
     }
-
-    // if (pingaan === true) {
-    //     // await msg.author
-    //     //     .send(
-    //     //         "jotakin kiusataan jo, voit joko jatkaa kiusaamista tai lopettaa se !stoppaapingi"
-    //     //     )
-    //     //     .catch(console.error);
-    // }
-
-}
 
 };
 
