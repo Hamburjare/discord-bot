@@ -4,9 +4,6 @@ const fetch = require('node-fetch');
 const db = DBclient.db(DBname);
 const collection = db.collection("food-pics");
 var options = { upsert: true };
-const Keyv = require('keyv');
-const keyv = new Keyv(process.env.DATABASE);
-keyv.on('error', err => console.error('Keyv connection error:', err)); 
 
 const colors = ['#000000', '#1ABC9C', '#11806A', '#57F287', '#1F8B4C', '#3498DB', '#206694', '#9B59B6', '#71368A', '#E91E63', '#AD1457', '#F1C40F', '#C27C0E', '#E67E22', '#A84300', '#ED4245', '#992D22', '#95A5A6', '#979C9F', '#7F8C8D', '#BCC0C0', '#34495E', '#2C3E50', '#FFFF00', '#FFFFFF', '#99AAb5', '#23272A', '#2C2F33', '#5865F2', '#57F287', '#FEE75C', '#EB459E', '#ED4245', '#607D8B', '#546E7A', '#36393F', '#69013B'];
 const lihaPhotos = [];

@@ -1,7 +1,15 @@
 const { EmbedBuilder, ApplicationCommandType } = require('discord.js');
-const Keyv = require('keyv');
-const keyv = new Keyv(process.env.DATABASE);
-keyv.on('error', err => console.error('Keyv connection error:', err));
+const { DBclient, DBname } = require('../..');
+
+function validURL(str) {
+    var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+    return !!pattern.test(str);
+}
 
 module.exports = {
     name: 'vaihdakuva',
@@ -25,15 +33,21 @@ module.exports = {
 
     ],
     run: async (client, interaction) => {
+        const db = DBclient.db(DBname);
+        const collection = db.collection("food-pics");
+        const options = { upsert: true };
+        try {
             let ruoka = interaction.options.get('ruoka').value.replace(/\(.*?\)/g, "");
             let kuva = interaction.options.get('kuva').value;
+            const filter = { name: ruoka };
+
             // Poistetaan välilyönnit alusta ja lopusta
             ruoka = ltrim(ruoka);
             ruoka = rtrim(ruoka);
             kuva = ltrim(kuva);
             kuva = rtrim(kuva);
 
-            let ruokadb = await keyv.get(`${ruoka}`);
+            let ruokadb = await collection.findOne({ name: ruoka });
             if (ruokadb === undefined) {
                 const embed = new EmbedBuilder()
                     .setTitle('Virheellinen ruoka')
@@ -41,7 +55,7 @@ module.exports = {
                     .setTimestamp()
 
                 interaction.reply({ embeds: [embed] })
-                return 
+                return
             }
 
             if (ruokadb === kuva) {
@@ -51,11 +65,11 @@ module.exports = {
                     .setTimestamp()
 
                 interaction.reply({ embeds: [embed] })
-                return 
+                return
             }
 
-            if (kuva.includes("https://") || kuva.includes("http://")) {
-                await keyv.set(ruoka, kuva);
+            if (validURL(kuva)) {
+                await collection.updateOne(filter, { $set: { name: ruoka, kuva: kuva } }, options);
                 const embed = new EmbedBuilder()
                     .setTitle('Kuvan vaihto onnistui')
                     .setDescription(`Ruuan (${ruoka}) kuva vaihdettiin onnistuneesti [kuvaan](${kuva})`)
@@ -63,7 +77,7 @@ module.exports = {
                     .setTimestamp();
 
                 interaction.reply({ embeds: [embed] })
-                return 
+                return
             } else {
                 const embed = new EmbedBuilder()
                     .setTitle('Virheellinen kuva')
@@ -72,12 +86,18 @@ module.exports = {
                     .setTimestamp()
 
                 interaction.reply({ embeds: [embed] })
-                return 
+                return
             }
+
+        }
+        catch (error) {
+            console.error(error);
+        }
+
     }
 };
 
-function ltrim(str) {
+    function ltrim(str) {
     if (!str) return str;
     return str.replace(/^\s+/g, '');
 }
