@@ -43,19 +43,19 @@
    5. [Create API Key to Google Custom Search Engine](https://developers.google.com/custom-search/v1/overview)
    6. Copy the API key and paste it to `GOOGLE_API` in `.env` file
 2.  Invite the bot to your server
-   1. Navigate to the OAuth2 page
-   2. Select bot from the scopes
-   3. Select the permissions you want to give the bot
-   4. Copy the generated link and open it in your browser
-   5. Select the server you want to add the bot to
-   6. Click Authorize
+       1. Navigate to the OAuth2 page
+       2. Select bot from the scopes
+       3. Select the permissions you want to give the bot
+       4. Copy the generated link and open it in your browser
+       5. Select the server you want to add the bot to
+       6. Click Authorize
 3.  Configure presence of the bot
-   1.  Open `json/config.json` file
-   2.  There you can change bot's Activity status and message
-       1.  Activity status: `online`, `idle`, `dnd` (do not disturb), `invisible`
-   3.  To change bot's Activity type open `events/ready.js` file
-       1.  In line 8 you can change the type of the Activity example ActivityType.Playing to ActivityType.Watching
-       2.  Activity types are: `Playing`, `Streaming`, `Listening`, `Watching`, `Competing`
+       1.  Open `json/config.json` file
+       2.  There you can change bot's Activity status and message
+       3.  Activity status: `online`, `idle`, `dnd` (do not disturb), `invisible`
+       4.  To change bot's Activity type open `events/ready.js` file
+           1.  In line 9 you can change the type of the Activity example ActivityType.Playing to ActivityType.Watching
+           2.  Activity types are: `Playing`, `Streaming`, `Listening`, `Watching`, `Competing`
 
 4.   To start the bot run the following command in the root directory of the project
 ```bash
