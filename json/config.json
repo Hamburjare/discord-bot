@@ -2,8 +2,5 @@
     "presence": {
         "MESSAGE": "Sandwiches are good!",
         "STATUS": "dnd"
-    },
-    "messages": {
-		"COOLDOWN_MESSAGE": "You are on `<duration>` cooldown!"
-	}
+    }
 }
