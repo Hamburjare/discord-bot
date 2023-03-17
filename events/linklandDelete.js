@@ -1,4 +1,4 @@
-const { client, DBclient } = require('..');
+const { client, DBclient, DBname } = require('..');
 
 function validURL(str) {
   var pattern = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?")
@@ -9,7 +9,7 @@ client.on("messageCreate", async (msg) => {
   if (msg.author.bot) return;
   if (validURL(msg.content)) {
     try {
-      const database = DBclient.db("HamburjareDB");
+      const database = DBclient.db(DBname);
       const collection = database.collection("server-config");
       const filter = { _id: msg.guild.id };
 

@@ -1,7 +1,7 @@
 const { config } = require('dotenv');
-const { client, DBclient } = require('..');
+const { client, DBclient, DBname } = require('..');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, ChannelType } = require('discord.js');
-const database = DBclient.db("HamburjareDB");
+const database = DBclient.db(DBname);
 const collection = database.collection("server-config");
 
 async function LinkLand(interaction) {

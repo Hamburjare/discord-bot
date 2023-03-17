@@ -18,11 +18,13 @@ const client = new Client({
 	partials: [Partials.Channel, Partials.Message, Partials.User, Partials.GuildMember, Partials.Reaction]
 });
 
+const DBname = process.env.DB_NAME
+
 
 client.commands = new Collection()
 client.aliases = new Collection()
 client.slashCommands = new Collection();
-module.exports = { client, DBclient};
+module.exports = { client, DBclient, DBname};
 
 ['slashCommand', 'events'].forEach((handler) => {
 	require(`./handlers/${handler}`)(client)

@@ -1,6 +1,6 @@
 const { EmbedBuilder, Collection, PermissionsBitField } = require('discord.js')
 const ms = require('ms');
-const { client, DBclient } = require('..');
+const { client, DBclient, DBname } = require('..');
 
 const prefix = client.prefix;
 const cooldown = new Collection();
@@ -18,15 +18,31 @@ client.on('messageCreate', async message => {
 
 	if (command) {
 		if (command.cooldown) {
-			const db = DBclient.db('HamburjareDB');
+			const db = DBclient.db(DBname);
 			const collection = db.collection('server-config');
 			const filter = { _id: message.guild.id };
 			var result = await collection.findOne(filter);
 			if (result === null || result === undefined) {
 				await collection.insertOne({
-					_id: interaction.guild.id, messages: {
+					_id: interaction.guild.id, 
+					messages: {
 						COOLDOWN_MESSAGE: 'You are on `<duration>` cooldown!'
-					}
+					}, bullying: {
+						category: ""
+					},
+					linkland: {
+						active: false,
+						channelID: "",
+						allowedChannels: [],
+						allowedUsers: [],
+						allowedLinks: [],
+						allowedRoles: []
+					},
+					admins: {
+						logChannel: "",
+						allowedUsers: [],
+						allowedRoles: []
+					},
 				}, function (err, res) {
 					if (err) throw err;
 					result = res;

@@ -1,7 +1,7 @@
-const { client, DBclient } = require('..');
+const { client, DBclient, DBname } = require('..');
 const { LinkLand, Bullying} = require('./selectMenu.js');
 const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle, ChannelType } = require('discord.js');
-const database = DBclient.db("HamburjareDB");
+const database = DBclient.db(DBname);
 const collection = database.collection("server-config");
 const options = { upsert: true };
 var filter = undefined;

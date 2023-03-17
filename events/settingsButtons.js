@@ -1,7 +1,7 @@
-const { client, DBclient } = require('..');
+const { client, DBclient, DBname } = require('..');
 const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 const { LinkLand } = require('./selectMenu.js');
-const database = DBclient.db("HamburjareDB");
+const database = DBclient.db(DBname);
 const collection = database.collection("server-config");
 var filter = undefined;
 var result = undefined;
@@ -276,7 +276,7 @@ async function Buttons(interaction) {
         interaction.reply({ content: 'Something went wrong, try again', ephemeral: true });
 
     }
-    
+
 
 }
 

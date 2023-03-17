@@ -1,5 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandType, ButtonStyle, ChannelType, PermissionsBitField } = require('discord.js');
-const { client, DBclient} = require('../..');
+const { client, DBclient, DBname} = require('../..');
 let pingaan = false;
 let pingihelvetti;
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
         if (pingaan === false) {
             const commands = await client.application.commands.fetch()
             const command = commands.find(command => command.name === 'settings')
-            const db = DBclient.db("HamburjareDB");
+            const db = DBclient.db(DBname);
             const collection = db.collection("server-config");
             const result = await collection.findOne({ _id: interaction.guild.id });
 

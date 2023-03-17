@@ -1,5 +1,9 @@
 const { EmbedBuilder, ApplicationCommandType } = require('discord.js');
+const { DBclient, DBname } = require('../..');
 const fetch = require('node-fetch');
+const db = DBclient.db(DBname);
+const collection = db.collection("food-pics");
+var options = { upsert: true };
 const Keyv = require('keyv');
 const keyv = new Keyv(process.env.DATABASE);
 keyv.on('error', err => console.error('Keyv connection error:', err)); 
@@ -51,7 +55,7 @@ async function getMeatPhotos() {
     for (let i = 0; i < liha.length; i++) {
         let trim = ltrim(liha[i].replace(/\(.*?\)/g, ""))
         trim = rtrim(trim)
-        const photo = await keyv.get(trim); 
+        const photo = await collection.findOne({ name: trim });
 
         if (photo !== undefined) {
             lihaPhotos.push(photo);
@@ -59,7 +63,7 @@ async function getMeatPhotos() {
             const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`); 
             const data = await ruokakuva.json(); 
             lihaPhotos.push(data.items[0].link);
-            await keyv.set(trim, data.items[0].link); 
+            await collection.insertOne({ name: trim, link: data.items[0].link }, options);; 
         }
     }
 }
@@ -68,7 +72,7 @@ async function getVegePhotos() {
     for (let i = 0; i < vege.length; i++) {
         let trim = ltrim(vege[i].replace(/\(.*?\)/g, ""))
         trim = rtrim(trim)
-        const photo = await keyv.get(trim); 
+        const photo = await collection.findOne({ name: trim });
 
         if (photo !== undefined) {
             vegePhotos.push(photo);
@@ -76,7 +80,7 @@ async function getVegePhotos() {
             const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`); 
             const data = await ruokakuva.json(); 
             vegePhotos.push(data.items[0].link);
-            await keyv.set(trim, data.items[0].link); 
+            await collection.insertOne({ name: trim, link: data.items[0].link }, options); 
         }
     }
 }
@@ -85,15 +89,15 @@ async function getDessertPhotos() {
     for (let i = 0; i < dessert.length; i++) {
         let trim = ltrim(dessert[i].replace(/\(.*?\)/g, ""))
         trim = rtrim(trim)
-        const photo = await keyv.get(trim); 
+        const photo = await collection.findOne({ name: trim });
 
         if (photo !== undefined) {
-            dessertPhotos.push(photo);
+            dessertPhotos.push(photo.link);
         } else {
             const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`); 
             const data = await ruokakuva.json();  
             dessertPhotos.push(data.items[0].link);
-            await keyv.set(trim, data.items[0].link); 
+            await collection.insertOne({ name: trim, link: data.items[0].link }, options);
         }
     }
 }

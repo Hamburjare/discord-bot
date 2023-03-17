@@ -1,11 +1,12 @@
 const { ActionRowBuilder, Events, StringSelectMenuBuilder, EmbedBuilder, ApplicationCommandType } = require('discord.js');
-const { DBclient } = require('../..');
+const { DBclient, DBname } = require('../..');
 
 
 async function CheckIfGuildHasDB(id) {
-    const db = DBclient.db("HamburjareDB");
+    const db = DBclient.db(DBname);
     const collection = db.collection("server-config");
     const filter = { _id: id };
+    const options = { upsert: true };
     try {
         const query =
             {
@@ -33,8 +34,8 @@ async function CheckIfGuildHasDB(id) {
 
         const result = await collection.findOne(filter);
 
-        if (result === null || result === undefined) {
-            await collection.insertOne(query);
+        if (result !== null || result !== undefined) {
+            await collection.updateOne(filter, { $set: query }, options);
         }
         
 
@@ -59,8 +60,6 @@ module.exports = {
             .setDescription('Here you can update the settings of the server')
             .setColor('#311432')
 
-        CheckIfGuildHasDB(interaction.guild.id);
-
 
         // dropdown menu
         const dropdown = new ActionRowBuilder()
@@ -78,11 +77,11 @@ module.exports = {
                         description: 'Update the bullying settings',
                         value: 'bullying'
                     },
-                    {
-                        label: 'Admins',
-                        description: 'Update the admin settings',
-                        value: 'admins'
-                    },
+                    // {
+                    //     label: 'Admins',
+                    //     description: 'Update the admin settings',
+                    //     value: 'admins'
+                    // },
                 ])
             )
 
