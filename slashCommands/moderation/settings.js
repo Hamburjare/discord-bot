@@ -78,6 +78,11 @@ module.exports = {
                         description: 'Update the bullying settings',
                         value: 'bullying'
                     },
+                    {
+                        label: 'Admins',
+                        description: 'Update the admin settings',
+                        value: 'admins'
+                    },
                 ])
             )
 

@@ -1,5 +1,4 @@
 const { client, DBclient } = require('..');
-const Discord = require('discord.js');
 
 function validURL(str) {
   var pattern = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?")
@@ -16,7 +15,8 @@ client.on("messageCreate", async (msg) => {
 
       const result = await collection.findOne(filter);
 
-      if (result) {
+      if (result && result.linkland.active) {
+        if (msg.channel.type === "DM") return;
 
         const channel = msg.guild.channels.cache.get(result.linkland["channelID"]);
         var found = false;
@@ -38,6 +38,7 @@ client.on("messageCreate", async (msg) => {
 
         });
         if (found === true) return;
+        if (result.linkland["channelID"] === "" || result.linkland["channelID"] === null || result.linkland["channelID"] === undefined) return;
         msg.delete();
         channel.send(`${msg.author} ***laittama viesti***: ${msg.content}`);
 

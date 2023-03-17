@@ -1,5 +1,6 @@
 const { client, DBclient } = require('..');
 const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { LinkLand } = require('./selectMenu.js');
 const database = DBclient.db("HamburjareDB");
 const collection = database.collection("server-config");
 var filter = undefined;
@@ -8,10 +9,10 @@ var result = undefined;
 async function IsLinkLandActive(interaction) {
     if (result.linkland["active"] === true) {
         await collection.updateOne(filter, { $set: { "linkland.active": false } });
-        interaction.reply({ content: 'LinkLand is now disabled!', ephemeral: true });
+        LinkLand(interaction);
     } else {
         await collection.updateOne(filter, { $set: { "linkland.active": true } });
-        interaction.reply({ content: 'LinkLand is now enabled!', ephemeral: true });
+        LinkLand(interaction);
     }
 }
 

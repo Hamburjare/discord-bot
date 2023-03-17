@@ -1,4 +1,5 @@
 const { client, DBclient } = require('..');
+const { LinkLand, Bullying} = require('./selectMenu.js');
 const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle, ChannelType } = require('discord.js');
 const database = DBclient.db("HamburjareDB");
 const collection = database.collection("server-config");
@@ -30,7 +31,7 @@ async function UpdatePrimaryChannel(interaction) {
     const channel = interaction.fields.getTextInputValue('primaryChannelId');
     if (!interaction.guild.channels.cache.get(channel)) return interaction.reply({ content: 'No channel found!', ephemeral: true });
     await collection.updateOne(filter, { $set: { "linkland.channelID": channel } }, options);
-    interaction.reply({ content: 'Channel changed!', ephemeral: true });
+    LinkLand(interaction);
 }
 
 async function AddLink(interaction) {
@@ -43,7 +44,7 @@ async function AddLink(interaction) {
     })
     if (links.length < 1) return interaction.reply({ content: 'No valid links found!', ephemeral: true });
     await collection.updateOne(filter, { $addToSet: { "linkland.allowedLinks": { $each: links } } }, options);
-    interaction.reply({ content: 'Links added!', ephemeral: true });
+    LinkLand(interaction);
 }
 
 async function RemoveLink(interaction) {
@@ -56,7 +57,7 @@ async function RemoveLink(interaction) {
     })
     if (links.length < 1) return interaction.reply({ content: 'No valid links found!', ephemeral: true });
     await collection.updateOne(filter, { $pull: { "linkland.allowedLinks": { $in: links } } }, options);
-    interaction.reply({ content: 'Links removed!', ephemeral: true });
+    LinkLand(interaction);
 }
 
 async function AddChannel(interaction) {
@@ -70,7 +71,7 @@ async function AddChannel(interaction) {
     if (channels.length < 1) return interaction.reply({ content: 'No valid channels found!', ephemeral: true });
 
     await collection.updateOne(filter, { $addToSet: { "linkland.allowedChannels": { $each: channels } } }, options);
-    interaction.reply({ content: 'All the valid channels added!', ephemeral: true });
+    LinkLand(interaction);
 }
 
 async function RemoveChannel(interaction) {
@@ -84,7 +85,7 @@ async function RemoveChannel(interaction) {
     if (channels.length < 1) return interaction.reply({ content: 'No valid channels found!', ephemeral: true });
 
     await collection.updateOne(filter, { $pull: { "linkland.allowedChannels": { $in: channels } } }, options);
-    interaction.reply({ content: 'All the valid channels removed!', ephemeral: true });
+    LinkLand(interaction);
 }
 
 async function AddRole(interaction) {
@@ -113,7 +114,7 @@ async function RemoveRole(interaction) {
 
     await collection.updateOne(filter, { $pull: { "linkland.allowedRoles": { $in: roles } } }, options);
 
-    interaction.reply({ content: 'All the valid roles removed!', ephemeral: true });
+    LinkLand(interaction);
 }
 
 async function AddUser(interaction) {
@@ -128,7 +129,7 @@ async function AddUser(interaction) {
 
     await collection.updateOne(filter, { $addToSet: { "linkland.allowedUsers": { $each: users } } }, options);
 
-    interaction.reply({ content: 'All the valid users added!', ephemeral: true });
+    LinkLand(interaction);
 }
 
 async function RemoveUser(interaction) {
@@ -142,8 +143,8 @@ async function RemoveUser(interaction) {
     if (users.length < 1) return interaction.reply({ content: 'No valid users found!', ephemeral: true });
 
     await collection.updateOne(filter, { $pull: { "linkland.allowedUsers": { $in: users } } }, options);
-
-    interaction.reply({ content: 'All the valid users removed!', ephemeral: true });
+    
+    LinkLand(interaction);
 }
 
 async function UpdateCategory(interaction) {
@@ -151,14 +152,14 @@ async function UpdateCategory(interaction) {
     const categoryCheck = interaction.guild.channels.cache.find(channel => channel.id === category && channel.type === ChannelType.GuildCategory)
     if (!categoryCheck) return interaction.reply({ content: 'Invalid category!', ephemeral: true });
     await collection.updateOne(filter, { $set: {  "bullying.category": category } }, options);
-    interaction.reply({ content: 'Category updated!', ephemeral: true });
+    Bullying(interaction);
 }
 
 async function UpdateLogChannel(interaction) {
     const channel = interaction.fields.getTextInputValue('logChannelId');
     if (!interaction.guild.channels.cache.get(channel)) return interaction.reply({ content: 'Invalid channel!', ephemeral: true });
     await collection.updateOne(filter, { $set: {  "admins.logChannel": channel } }, options);
-    interaction.reply({ content: 'Log channel updated!', ephemeral: true });
+    Bullying(interaction);
 }
 
 async function linklandModalHandler(interaction) {
