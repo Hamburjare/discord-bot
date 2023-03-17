@@ -1,33 +1,12 @@
 version: '3'
 
-networks:
-  back-tier:
-    driver: bridge
 
 services:
-  db:
-    image: mongo:latest
-    container_name: mongodb
-    restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    volumes:
-      - dbdata:/data/db
-    networks:
-      - back-tier
-    ports:
-      - 27017:27017
     
   app:
     build: .
     container_name: discord-bot
-    depends_on:
-      - db
     env_file: .env
     restart: unless-stopped
-    networks:
-      - back-tier
     
-volumes:
-  dbdata:
+    
