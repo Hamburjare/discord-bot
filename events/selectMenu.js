@@ -1,5 +1,6 @@
-const { client, DBclient } = require('..');
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
+const { config } = require('dotenv');
+const { client, DBclient, dropdown } = require('..');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, ChannelType } = require('discord.js');
 
 client.on("interactionCreate", async (interaction) => {
     if (!interaction.isStringSelectMenu()) return;
@@ -9,24 +10,14 @@ client.on("interactionCreate", async (interaction) => {
         const filter = { _id: interaction.guild.id };
         const result = await collection.findOne(filter);
         if (interaction.customId === 'settings') {
-            const dropdown = new ActionRowBuilder()
-                .addComponents(new StringSelectMenuBuilder()
-                    .setCustomId('settings')
-                    .setPlaceholder('Select a setting')
-                    .addOptions([
-                        {
-                            label: 'LinkLand',
-                            description: 'Update the linkland settings',
-                            value: 'linkland',
-                        },
-                        {
-                            label: 'Bullying',
-                            description: 'Update the bullying settings',
-                            value: 'bullying'
-                        },
-                    ])
-                )
+
             if (interaction.values[0] === 'linkland') {
+                var primaryChannel = result.linkland["channelID"];
+                if (primaryChannel === null || primaryChannel === undefined) {
+                    primaryChannel = 'None'
+                } else {
+                    primaryChannel = `<#${primaryChannel}>`
+                }
 
                 const allowedChannels = [];
                 result.linkland["allowedChannels"].forEach(channel => {
@@ -65,7 +56,7 @@ client.on("interactionCreate", async (interaction) => {
                 } else {
                     linkland.addFields({ name: 'Bot is currently listening links', value: 'No' })
                 }
-                linkland.addFields({ name: 'Channel where bot sends links', value: `<#${result.linkland["channelID"]}>` })
+                linkland.addFields({ name: 'Channel where bot sends links', value: primaryChannel })
                 linkland.addFields({ name: 'Allowed channels', value: allowedChannels.join(' ') })
                 linkland.addFields({ name: 'Allowed users', value: allowedUsers.join(' ') })
                 linkland.addFields({ name: 'Allowed links', value: allowedLinks.join('\n') })
@@ -73,7 +64,7 @@ client.on("interactionCreate", async (interaction) => {
 
                 linkland.setColor('#311432')
 
-                
+
 
                 const editLinks = new ActionRowBuilder()
                     .addComponents([
@@ -112,7 +103,7 @@ client.on("interactionCreate", async (interaction) => {
                             .setStyle(ButtonStyle.Secondary)
                             .setEmoji('📁')
                     ])
-                
+
 
                 const editUsers = new ActionRowBuilder()
                     .addComponents([
@@ -142,17 +133,59 @@ client.on("interactionCreate", async (interaction) => {
                             .setEmoji('👥')
                     ])
 
-                interaction.update({ embeds: [linkland], components: [dropdown, editLinks, editChannels, editUsers], ephemeral: true })
+                interaction.update({ embeds: [linkland], components: [interaction.message.components[0], editLinks, editChannels, editUsers], ephemeral: true })
 
             }
             if (interaction.values[0] === 'bullying') {
-                
+                const commands = await client.application.commands.fetch()
+                const command = commands.find(command => command.name === 'kiusaa')
+                var category = interaction.guild.channels.cache.find(channel => channel.id === result.bullying["category"] && channel.type === ChannelType.GuildCategory)
+                var logChannel = interaction.guild.channels.cache.find(channel => channel.id === result.admins["logChannel"])
+
+
+                if (!category) {
+                    category = 'None'
+                } else {
+                    category = `<#${category.id}>`
+                }
+
+                if (!logChannel) {
+                    logChannel = 'None'
+                } else {
+                    logChannel = `<#${logChannel.id}>`
+                }
+
+                const bullying = new EmbedBuilder()
+                    .setTitle('Settings - Bullying')
+                    .setDescription('Bullying is a feature that bot makes a channel under specific category and starts to pinging a given user.\n NOTE: Only one user can be pinged at the same time.')
+                    .setColor('#311432')
+                    .setFields([
+                        { name: 'Command', value: `</kiusaa:${command.id}>` },
+                        { name: 'Category where bot creates channel', value: `${category}` },
+                        { name: 'Log Channel', value: `${logChannel}` },
+                    ])
+
+                const editBullying = new ActionRowBuilder()
+                    .addComponents([
+                        new ButtonBuilder()
+                            .setCustomId('category')
+                            .setLabel('Category')
+                            .setStyle(ButtonStyle.Secondary)
+                            .setEmoji('📁'),
+                        new ButtonBuilder()
+                            .setCustomId('logChannel')
+                            .setLabel('Log Channel')
+                            .setStyle(ButtonStyle.Secondary)
+                            .setEmoji('📁')
+                    ])
+
+                interaction.update({ embeds: [bullying], components: [interaction.message.components[0], editBullying], ephemeral: true })
             }
         }
     }
     catch (err) {
         console.log(err.stack);
     }
-    
+
 
 });

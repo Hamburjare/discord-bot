@@ -9,7 +9,6 @@ client.on("ready", () => {
 		activities: [{ name: config.presence["MESSAGE"], type: ActivityType.Playing }],
 		status: config.presence["STATUS"],
 	});
-
-
+	
 	console.log(chalk.red(`Logged in as ${client.user.tag}!`))
 });

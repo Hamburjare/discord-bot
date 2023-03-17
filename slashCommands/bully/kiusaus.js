@@ -1,5 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandType, ButtonStyle, ChannelType, PermissionsBitField } = require('discord.js');
-const config = require('../../json/config.json');
+const { client, DBclient} = require('../..');
 let pingaan = false;
 let pingihelvetti;
 module.exports = {
@@ -20,12 +20,24 @@ module.exports = {
     run: async (client, interaction) => {
 
         if (pingaan === false) {
+            const commands = await client.application.commands.fetch()
+            const command = commands.find(command => command.name === 'settings')
+            const db = DBclient.db("HamburjareDB");
+            const collection = db.collection("server-config");
+            const result = await collection.findOne({ _id: interaction.guild.id });
+
+            if (!result) {
+                
+                return await interaction.reply({ content: `Error! Use </settings:${command.id}> to configure category and channel.`, ephemeral: true });
+            };
+
             const user = interaction.guild.members.cache.get(interaction.options.get('user').value);
             const bully = interaction.guild.members.cache.get(interaction.user.id);
-            let logi = interaction.guild.channels.cache.get(config.kiusaus["LOG_CHANNEL"]);
+            let logi = interaction.guild.channels.cache.get(result.admins["logChannel"]);
+
+
             pingaan = true;
 
-            // let pingichannel = interaction.guild.channels.cache.get("819875691306811403");
             let pingichannel = await createChannel(interaction.guild, `kiusaus-kannu`, [
                 {
                     id: interaction.guild.id,
@@ -36,7 +48,7 @@ module.exports = {
                     allow: [PermissionsBitField.Flags.ViewChannel],
                 },
             ]);
-            await pingichannel.setParent(config.kiusaus["CATEGORY"], { lockPermissions: false });
+            await pingichannel.setParent(result.bullying["CATEGORY"], { lockPermissions: false });
 
             const viesti = new EmbedBuilder()
                 .setTitle("**Sinua kiusataan**")
