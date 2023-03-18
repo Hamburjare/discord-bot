@@ -1,5 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandType, ButtonStyle } = require('discord.js');
-const client = require('..');
+const {client, DBclient} = require('..');
 
 client.on("voiceStateUpdate", (oldMember, newMember) => {
     let newUserChannel = newMember.channelId;

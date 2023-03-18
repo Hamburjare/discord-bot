@@ -1,34 +1,33 @@
-const { Client, GatewayIntentBits, Partials, Collection} = require('discord.js');
-const Keyv = require('keyv');
-const keyv = new Keyv(process.env.DATABASE);
+require('dotenv').config()
+const { Client, GatewayIntentBits, Partials, Collection, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
+const { MongoClient } = require('mongodb');
+const DBclient = new MongoClient(process.env.MONGODB_URI);
+DBclient.connect();
 const client = new Client({
 	intents: [
-		GatewayIntentBits.Guilds, 
-		GatewayIntentBits.GuildMessages, 
-		GatewayIntentBits.GuildPresences, 
-		GatewayIntentBits.GuildMessageReactions, 
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.GuildPresences,
+		GatewayIntentBits.GuildMessageReactions,
 		GatewayIntentBits.DirectMessages,
 		GatewayIntentBits.MessageContent,
 		GatewayIntentBits.GuildVoiceStates,
 		GatewayIntentBits.GuildMessageTyping,
 		GatewayIntentBits.GuildIntegrations
-	], 
-	partials: [Partials.Channel, Partials.Message, Partials.User, Partials.GuildMember, Partials.Reaction] 
+	],
+	partials: [Partials.Channel, Partials.Message, Partials.User, Partials.GuildMember, Partials.Reaction]
 });
 
-const config = require('./json/config.json');
-require('dotenv').config() // remove this line if you are using replit
+const DBname = process.env.DB_NAME
+
 
 client.commands = new Collection()
 client.aliases = new Collection()
 client.slashCommands = new Collection();
-module.exports = client;
-
+module.exports = { client, DBclient, DBname};
 
 ['slashCommand', 'events'].forEach((handler) => {
-  require(`./handlers/${handler}`)(client)
+	require(`./handlers/${handler}`)(client)
 });
-
-keyv.on('error', err => console.error('Keyv connection error:', err));
 
 client.login(process.env.TOKEN)

@@ -1,7 +1,6 @@
 const { EmbedBuilder, Collection, PermissionsBitField } = require('discord.js')
 const ms = require('ms');
-const client = require('..');
-const config = require('../json/config.json');
+const { client, DBclient, DBname } = require('..');
 
 const prefix = client.prefix;
 const cooldown = new Collection();
@@ -10,6 +9,7 @@ client.on('messageCreate', async message => {
 	if (message.author.bot) return;
 	if (message.channel.type !== 0) return;
 	if (!message.content.startsWith(prefix)) return;
+
 	const args = message.content.slice(prefix.length).trim().split(/ +/g);
 	const cmd = args.shift().toLowerCase();
 	if (cmd.length === 0) return;
@@ -18,10 +18,41 @@ client.on('messageCreate', async message => {
 
 	if (command) {
 		if (command.cooldown) {
+			const db = DBclient.db(DBname);
+			const collection = db.collection('server-config');
+			const filter = { _id: message.guild.id };
+			var result = await collection.findOne(filter);
+			if (result === null || result === undefined) {
+				await collection.insertOne({
+					_id: interaction.guild.id, 
+					messages: {
+						COOLDOWN_MESSAGE: 'You are on `<duration>` cooldown!'
+					}, bullying: {
+						category: ""
+					},
+					linkland: {
+						active: false,
+						channelID: "",
+						allowedChannels: [],
+						allowedUsers: [],
+						allowedLinks: [],
+						allowedRoles: []
+					},
+					admins: {
+						logChannel: "",
+						allowedUsers: [],
+						allowedRoles: []
+					},
+				}, function (err, res) {
+					if (err) throw err;
+					result = res;
+				});
+
+			}
 			if (cooldown.has(`${command.name}${message.author.id}`)) {
-				message.channel.send({ content: config.messages["COOLDOWN_MESSAGE"].replace('<duration>', ms(cooldown.get(`${command.name}${message.author.id}`) - Date.now(), { long: true })) });
-				return 
-			} 
+				message.channel.send({ content: result.messages["COOLDOWN_MESSAGE"].replace('<duration>', ms(cooldown.get(`${command.name}${message.author.id}`) - Date.now(), { long: true })) });
+				return
+			}
 			if (command.userPerms || command.botPerms) {
 				if (!message.member.permissions.has(PermissionsBitField.resolve(command.userPerms || []))) {
 					const userPerms = new EmbedBuilder()

@@ -1,47 +1,12 @@
 version: '3'
 
-networks:
-  back-tier:
-    driver: bridge
 
 services:
-  db:
-    image: mysql
-    container_name: db
-    environment:
-      MYSQL_ROOT_PASSWORD: Abc123
-      MYSQL_DATABASE: discord-bot
-    ports:
-      - '3306:3306'
-    volumes:
-      - dbdata:/var/lib/mysql
-    restart: unless-stopped
-    networks:
-      - back-tier
-
-  phpmyadmin:
-    image: phpmyadmin
-    container_name: pma
-    links:
-      - db
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-    restart: unless-stopped
-    ports:
-      - 8081:80
-    networks:
-      - back-tier
     
   app:
     build: .
     container_name: discord-bot
-    depends_on:
-      - db
     env_file: .env
     restart: unless-stopped
-    networks:
-      - back-tier
     
-volumes:
-  dbdata:
+    

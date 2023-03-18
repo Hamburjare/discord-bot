@@ -1,23 +1,54 @@
-const client = require('..')
-const Discord = require('discord.js');
+const { client, DBclient, DBname } = require('..');
 
-client.on("messageCreate", (msg) => {
-    if (msg.author.bot) return;
-    if (
-      msg.guild.id === "692296062924488714" ||
-      msg.content.includes("https://streamable") ||
-      msg.channel.id === "872128881979707483" ||
-      msg.content.includes("https://tenor.com") ||
-      msg.content.includes("https://cdn.discordapp.com/attachments/") ||
-      msg.channel.id === "784453087158861864" ||
-      msg.content.includes("https://medal.tv/") || msg.content.includes("https://youtu.be/")
-    )
-      return;
-    if (msg.channel.id !== "784802376669986816") {
-      if (msg.content.includes("https://") + msg.content.includes("http://")) {
-        let channelli = client.channels.cache.get("784802376669986816");
+function validURL(str) {
+  var pattern = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?")
+  return !!pattern.test(str);
+}
+
+client.on("messageCreate", async (msg) => {
+  if (msg.author.bot) return;
+  if (validURL(msg.content)) {
+    try {
+      const database = DBclient.db(DBname);
+      const collection = database.collection("server-config");
+      const filter = { _id: msg.guild.id };
+
+      const result = await collection.findOne(filter);
+
+      if (result && result.linkland.active) {
+        if (msg.channel.type === "DM") return;
+
+        const channel = msg.guild.channels.cache.get(result.linkland["channelID"]);
+        var found = false;
+
+        if (result.linkland["channelID"] === msg.channel.id) return;
+        if (result.linkland["active"] === false) return;
+        if (result.linkland["allowedChannels"].includes(msg.channel.id)) return;
+        if (result.linkland["allowedUsers"].includes(msg.author.id)) return;
+
+        for (let i = 0; i < result.linkland["allowedRoles"].length; i++) {
+          if (msg.member.roles.cache.has(result.linkland["allowedRoles"][i])) {
+            found = true;
+            break;
+          }
+        }
+
+        result.linkland["allowedLinks"].forEach(link => {
+          if(msg.content.includes(link)) found = true;
+
+        });
+        if (found === true) return;
+        if (result.linkland["channelID"] === "" || result.linkland["channelID"] === null || result.linkland["channelID"] === undefined) return;
         msg.delete();
-        channelli.send(`${msg.author} ***laittama viesti***: ${msg.content}`);
-      }
+        channel.send(`${msg.author} ***laittama viesti***: ${msg.content}`);
+
+      };
+
     }
-  });
+    catch (err) {
+      console.log(err.stack);
+    }
+    
+  }
+
+});
