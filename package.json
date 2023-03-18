@@ -1,6 +1,6 @@
 {
-  "name": "hamburjare-testinukke",
-  "version": "0.1.0",
+  "name": "hamburjare",
+  "version": "1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,6 @@
   "homepage": "https://github.com/Hamburjare/discord-bot#readme",
   "dependencies": {
     "@discordjs/rest": "^1.3.0",
-    "@keyv/mysql": "^1.4.2",
     "ascii-table": "^0.0.9",
     "chalk": "^2.4.1",
     "discord-api-types": "^0.37.14",
