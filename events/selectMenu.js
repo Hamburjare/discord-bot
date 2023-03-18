@@ -5,7 +5,8 @@ const database = DBclient.db(DBname);
 const collection = database.collection("server-config");
 
 async function LinkLand(interaction) {
-    const filter = { _id: interaction.guild.id };
+    try {
+        const filter = { _id: interaction.guild.id };
     const result = await collection.findOne(filter);
     var primaryChannel = result.linkland["channelID"];
     if (primaryChannel === null || primaryChannel === undefined || primaryChannel === "") {
@@ -129,54 +130,65 @@ async function LinkLand(interaction) {
         ])
 
     interaction.update({ embeds: [linkland], components: [interaction.message.components[0], editLinks, editChannels, editUsers], ephemeral: true })
+    }
+    catch (error) {
+        console.log(error)
+    }
+    
 }
 
 async function Bullying(interaction) {
-    const filter = { _id: interaction.guild.id };
-    const result = await collection.findOne(filter);
-    const commands = await client.application.commands.fetch()
-    const command = commands.find(command => command.name === 'kiusaa')
-    var category = interaction.guild.channels.cache.find(channel => channel.id === result.bullying["category"] && channel.type === ChannelType.GuildCategory)
-    var logChannel = interaction.guild.channels.cache.find(channel => channel.id === result.admins["logChannel"])
-
-
-    if (!category) {
-        category = 'None'
-    } else {
-        category = `<#${category.id}>`
+    try {
+        const filter = { _id: interaction.guild.id };
+        const result = await collection.findOne(filter);
+        const commands = await client.application.commands.fetch()
+        const command = commands.find(command => command.name === 'kiusaa')
+        var category = interaction.guild.channels.cache.find(channel => channel.id === result.bullying["category"] && channel.type === ChannelType.GuildCategory)
+        var logChannel = interaction.guild.channels.cache.find(channel => channel.id === result.admins["logChannel"])
+    
+    
+        if (!category) {
+            category = 'None'
+        } else {
+            category = `<#${category.id}>`
+        }
+    
+        if (!logChannel) {
+            logChannel = 'None'
+        } else {
+            logChannel = `<#${logChannel.id}>`
+        }
+    
+        const bullying = new EmbedBuilder()
+            .setTitle('Settings - Bullying')
+            .setDescription('Bullying is a feature that bot makes a channel under specific category and starts to pinging a given user.\n NOTE: Only one user can be pinged at the same time.')
+            .setColor('#311432')
+            .setFields([
+                { name: 'Command', value: `</kiusaa:${command.id}>` },
+                { name: 'Category where bot creates channel', value: `${category}` },
+                { name: 'Log Channel', value: `${logChannel}` },
+            ])
+    
+        const editBullying = new ActionRowBuilder()
+            .addComponents([
+                new ButtonBuilder()
+                    .setCustomId('category')
+                    .setLabel('Category')
+                    .setStyle(ButtonStyle.Secondary)
+                    .setEmoji('📁'),
+                new ButtonBuilder()
+                    .setCustomId('logChannel')
+                    .setLabel('Log Channel')
+                    .setStyle(ButtonStyle.Secondary)
+                    .setEmoji('📁')
+            ])
+    
+        interaction.update({ embeds: [bullying], components: [interaction.message.components[0], editBullying], ephemeral: true })
     }
-
-    if (!logChannel) {
-        logChannel = 'None'
-    } else {
-        logChannel = `<#${logChannel.id}>`
+    catch (error) {
+        console.log(error)
     }
-
-    const bullying = new EmbedBuilder()
-        .setTitle('Settings - Bullying')
-        .setDescription('Bullying is a feature that bot makes a channel under specific category and starts to pinging a given user.\n NOTE: Only one user can be pinged at the same time.')
-        .setColor('#311432')
-        .setFields([
-            { name: 'Command', value: `</kiusaa:${command.id}>` },
-            { name: 'Category where bot creates channel', value: `${category}` },
-            { name: 'Log Channel', value: `${logChannel}` },
-        ])
-
-    const editBullying = new ActionRowBuilder()
-        .addComponents([
-            new ButtonBuilder()
-                .setCustomId('category')
-                .setLabel('Category')
-                .setStyle(ButtonStyle.Secondary)
-                .setEmoji('📁'),
-            new ButtonBuilder()
-                .setCustomId('logChannel')
-                .setLabel('Log Channel')
-                .setStyle(ButtonStyle.Secondary)
-                .setEmoji('📁')
-        ])
-
-    interaction.update({ embeds: [bullying], components: [interaction.message.components[0], editBullying], ephemeral: true })
+    
 }
 module.exports = { LinkLand, Bullying }
 
