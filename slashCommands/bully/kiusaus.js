@@ -48,7 +48,7 @@ module.exports = {
                     allow: [PermissionsBitField.Flags.ViewChannel],
                 },
             ]);
-            await pingichannel.setParent(result.bullying["CATEGORY"], { lockPermissions: false });
+            await pingichannel.setParent(result.bullying["category"], { lockPermissions: false });
 
             const viesti = new EmbedBuilder()
                 .setTitle("**Sinua kiusataan**")
