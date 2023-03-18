@@ -36,11 +36,13 @@ async function UpdatePrimaryChannel(interaction) {
 
 async function AddLink(interaction) {
     const link = interaction.fields.getTextInputValue('linkToAdd');
-    const links = link.split(',');
-    links.forEach(link => {
+    const linkArray = link.split(',');
+    let links = [];
+    linkArray.forEach(link => {
         link = ltrim(link);
         link = rtrim(link);
-        if (!validURL(link)) links.splice(links.indexOf(link), 1);
+        if (!validURL(link)) return;
+        links.push(link);
     })
     if (links.length < 1) return interaction.reply({ content: 'No valid links found!', ephemeral: true });
     await collection.updateOne(filter, { $addToSet: { "linkland.allowedLinks": { $each: links } } }, options);
@@ -49,11 +51,13 @@ async function AddLink(interaction) {
 
 async function RemoveLink(interaction) {
     const link = interaction.fields.getTextInputValue('linkToRemove');
-    const links = link.split(',');
-    links.forEach(link => {
+    const linkArray = link.split(',');
+    let links = [];
+    linkArray.forEach(link => {
         link = ltrim(link);
         link = rtrim(link);
-        if (!validURL(link)) links.splice(links.indexOf(link), 1);
+        if (!validURL(link)) return;
+        links.push(link);
     })
     if (links.length < 1) return interaction.reply({ content: 'No valid links found!', ephemeral: true });
     await collection.updateOne(filter, { $pull: { "linkland.allowedLinks": { $in: links } } }, options);
@@ -62,11 +66,13 @@ async function RemoveLink(interaction) {
 
 async function AddChannel(interaction) {
     const channel = interaction.fields.getTextInputValue('channelId');
-    const channels = channel.split(',');
-    channels.forEach(channel => {
+    const channelArray = channel.split(',');
+    let channels = [];
+    channelArray.forEach(channel => {
         channel = ltrim(channel);
         channel = rtrim(channel);
-        if (!interaction.guild.channels.cache.get(channel)) channels.splice(channels.indexOf(channel), 1);
+        if (!interaction.guild.channels.cache.get(channel)) return;
+        channels.push(channel);
     })
     if (channels.length < 1) return interaction.reply({ content: 'No valid channels found!', ephemeral: true });
 
@@ -76,11 +82,13 @@ async function AddChannel(interaction) {
 
 async function RemoveChannel(interaction) {
     const channel = interaction.fields.getTextInputValue('channelId');
-    const channels = channel.split(',');
-    channels.forEach(channel => {
+    const channelArray = channel.split(',');
+    let channels = [];
+    channelArray.forEach(channel => {
         channel = ltrim(channel);
         channel = rtrim(channel);
-        if (!interaction.guild.channels.cache.get(channel)) channels.splice(channels.indexOf(channel), 1);
+        if (!interaction.guild.channels.cache.get(channel)) return;
+        channels.push(channel);
     })
     if (channels.length < 1) return interaction.reply({ content: 'No valid channels found!', ephemeral: true });
 
@@ -90,25 +98,30 @@ async function RemoveChannel(interaction) {
 
 async function AddRole(interaction) {
     const role = interaction.fields.getTextInputValue('roleId');
-    const roles = role.split(',');
-    roles.forEach(role => {
+    const roleArray = role.split(',');
+    let roles = [];
+    roleArray.forEach(role => {
         role = ltrim(role);
         role = rtrim(role);
-        if (!interaction.guild.roles.cache.get(role)) roles.splice(roles.indexOf(role), 1);
+        if (!interaction.guild.roles.cache.get(role)) return;
+        roles.push(role);
     })
     if (roles.length < 1) return interaction.reply({ content: 'No valid roles found!', ephemeral: true });
 
     await collection.updateOne(filter, { $addToSet: { "linkland.allowedRoles": { $each: roles } } }, options);
     interaction.reply({ content: 'All the valid roles added!', ephemeral: true });
+    LinkLand(interaction);
 }
 
 async function RemoveRole(interaction) {
     const role = interaction.fields.getTextInputValue('roleId');
-    const roles = role.split(',');
-    roles.forEach(role => {
+    const roleArray = role.split(',');
+    let roles = [];
+    roleArray.forEach(role => {
         role = ltrim(role);
         role = rtrim(role);
-        if (!interaction.guild.roles.cache.get(role)) roles.splice(roles.indexOf(role), 1);
+        if (!interaction.guild.roles.cache.get(role)) return;
+        roles.push(role);
     })
     if (roles.length < 1) return interaction.reply({ content: 'No valid roles found!', ephemeral: true });
 
@@ -119,11 +132,13 @@ async function RemoveRole(interaction) {
 
 async function AddUser(interaction) {
     const user = interaction.fields.getTextInputValue('userId');
-    const users = user.split(',');
-    users.forEach(user => {
+    const userArray = user.split(',');
+    let users = [];
+    userArray.forEach(user => {
         user = ltrim(user);
         user = rtrim(user);
-        if (!interaction.guild.members.cache.get(user)) users.splice(users.indexOf(user), 1);
+        if (!interaction.guild.members.cache.get(user)) return;
+        users.push(user);
     })
     if (users.length < 1) return interaction.reply({ content: 'No valid users found!', ephemeral: true });
 
@@ -134,11 +149,13 @@ async function AddUser(interaction) {
 
 async function RemoveUser(interaction) {
     const user = interaction.fields.getTextInputValue('userId');
-    const users = user.split(',');
-    users.forEach(user => {
+    const userArray = user.split(',');
+    let users = [];
+    userArray.forEach(user => {
         user = ltrim(user);
         user = rtrim(user);
-        if (!interaction.guild.members.cache.get(user)) users.splice(users.indexOf(user), 1);
+        if (!interaction.guild.members.cache.get(user)) return;
+        users.push(user);
     })
     if (users.length < 1) return interaction.reply({ content: 'No valid users found!', ephemeral: true });
 
