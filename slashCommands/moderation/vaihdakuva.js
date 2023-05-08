@@ -69,7 +69,7 @@ module.exports = {
             }
 
             if (validURL(kuva)) {
-                await collection.updateOne(filter, { $set: { name: ruoka, kuva: kuva } }, options);
+                await collection.updateOne(filter, { $set: { name: ruoka, link: kuva } }, options);
                 const embed = new EmbedBuilder()
                     .setTitle('Kuvan vaihto onnistui')
                     .setDescription(`Ruuan (${ruoka}) kuva vaihdettiin onnistuneesti [kuvaan](${kuva})`)

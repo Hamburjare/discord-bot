@@ -33,19 +33,19 @@ function currentDate() {
 }
 
 function getPhotosFromGoogle(type) {
-        switch (type) {
-            case "liha":
-                getMeatPhotos();
-                break;
-            case "vege":
-                getVegePhotos();
-                break;
-            case "dessert":
-                getDessertPhotos();
-                break;
-            default:
-                break;
-        }
+    switch (type) {
+        case "liha":
+            getMeatPhotos();
+            break;
+        case "vege":
+            getVegePhotos();
+            break;
+        case "dessert":
+            getDessertPhotos();
+            break;
+        default:
+            break;
+    }
 }
 
 async function getMeatPhotos() {
@@ -54,13 +54,18 @@ async function getMeatPhotos() {
         trim = rtrim(trim)
         const photo = await collection.findOne({ name: trim });
 
-        if (photo !== undefined) {
-            lihaPhotos.push(photo);
+        if (photo !== undefined && photo !== null) {
+            lihaPhotos.push(photo.link);
         } else {
-            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`); 
-            const data = await ruokakuva.json(); 
+            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`);
+            const data = await ruokakuva.json();
+            if (!data.items[0].link.startsWith("http")) {
+                lihaPhotos.push("https://i.imgur.com/ME4Ef.jpeg");
+                await collection.insertOne({ name: trim, link: "https://i.imgur.com/ME4Ef.jpeg" }, options);
+                continue;
+            }
             lihaPhotos.push(data.items[0].link);
-            await collection.insertOne({ name: trim, link: data.items[0].link }, options);; 
+            await collection.insertOne({ name: trim, link: data.items[0].link }, options);;
         }
     }
 }
@@ -71,13 +76,18 @@ async function getVegePhotos() {
         trim = rtrim(trim)
         const photo = await collection.findOne({ name: trim });
 
-        if (photo !== undefined) {
-            vegePhotos.push(photo);
+        if (photo !== undefined && photo !== null) {
+            vegePhotos.push(photo.link);
         } else {
-            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`); 
-            const data = await ruokakuva.json(); 
+            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`);
+            const data = await ruokakuva.json();
+            if (!data.items[0].link.startsWith("http")) {
+                vegePhotos.push("https://i.imgur.com/ME4Ef.jpeg");
+                await collection.insertOne({ name: trim, link: "https://i.imgur.com/ME4Ef.jpeg" }, options);
+                continue;
+            }
             vegePhotos.push(data.items[0].link);
-            await collection.insertOne({ name: trim, link: data.items[0].link }, options); 
+            await collection.insertOne({ name: trim, link: data.items[0].link }, options);
         }
     }
 }
@@ -88,11 +98,16 @@ async function getDessertPhotos() {
         trim = rtrim(trim)
         const photo = await collection.findOne({ name: trim });
 
-        if (photo !== undefined) {
+        if (photo !== undefined && photo !== null) {
             dessertPhotos.push(photo.link);
         } else {
-            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`); 
-            const data = await ruokakuva.json();  
+            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`);
+            const data = await ruokakuva.json();
+            if (!data.items[0].link.startsWith("http")) {
+                dessertPhotos.push("https://i.imgur.com/ME4Ef.jpeg");
+                await collection.insertOne({ name: trim, link: "https://i.imgur.com/ME4Ef.jpeg" }, options);
+                continue;
+            }
             dessertPhotos.push(data.items[0].link);
             await collection.insertOne({ name: trim, link: data.items[0].link }, options);
         }
@@ -200,6 +215,6 @@ module.exports = {
         lihaPhotos.length = 0;
         vegePhotos.length = 0;
         dessertPhotos.length = 0;
-    } 
+    }
 
 };
