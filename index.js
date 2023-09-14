@@ -1,7 +1,6 @@
-require('dotenv').config()
 const { Client, GatewayIntentBits, Partials, Collection, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 const { MongoClient } = require('mongodb');
-const DBclient = new MongoClient(process.env.MONGODB_URI);
+const DBclient = new MongoClient(Bun.env.MONGODB_URI);
 DBclient.connect();
 const client = new Client({
 	intents: [
@@ -18,16 +17,16 @@ const client = new Client({
 	partials: [Partials.Channel, Partials.Message, Partials.User, Partials.GuildMember, Partials.Reaction]
 });
 
-const DBname = process.env.DB_NAME
+const DBname = Bun.env.DB_NAME
 
 
 client.commands = new Collection()
 client.aliases = new Collection()
 client.slashCommands = new Collection();
-module.exports = { client, DBclient, DBname};
+module.exports = { client, DBclient, DBname };
 
 ['slashCommand', 'events'].forEach((handler) => {
 	require(`./handlers/${handler}`)(client)
 });
 
-client.login(process.env.TOKEN)
+client.login(Bun.env.TOKEN)

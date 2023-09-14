@@ -1,12 +1,12 @@
-FROM node:20
+FROM oven/bun
 
 WORKDIR /app
 
 COPY package*.json ./
 COPY .env ./
 
-RUN npm install
+RUN bun install
 
 COPY . .
 
-CMD ["npm","start"]
+CMD ["bun","start"]
