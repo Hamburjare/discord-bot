@@ -18,7 +18,6 @@
    ```bash
    TOKEN=
    CLIENT_ID=
-   GUILD_ID=
    GOOGLE_API=
    MONGODB_URI=
    DB_NAME=<database name>
