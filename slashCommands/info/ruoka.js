@@ -1,5 +1,6 @@
 const { EmbedBuilder, ApplicationCommandType } = require('discord.js');
 const { DBclient, DBname } = require('../..');
+const fetch = require('node-fetch');
 const db = DBclient.db(DBname);
 const collection = db.collection("food-pics");
 var options = { upsert: true };
@@ -56,7 +57,7 @@ async function getMeatPhotos() {
         if (photo !== undefined && photo !== null) {
             lihaPhotos.push(photo.link);
         } else {
-            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${Bun.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`);
+            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`);
             const data = await ruokakuva.json();
             if (!data.items[0].link.startsWith("http")) {
                 lihaPhotos.push("https://i.imgur.com/ME4Ef.jpeg");
@@ -78,7 +79,7 @@ async function getVegePhotos() {
         if (photo !== undefined && photo !== null) {
             vegePhotos.push(photo.link);
         } else {
-            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${Bun.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`);
+            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`);
             const data = await ruokakuva.json();
             if (!data.items[0].link.startsWith("http")) {
                 vegePhotos.push("https://i.imgur.com/ME4Ef.jpeg");
@@ -100,7 +101,7 @@ async function getDessertPhotos() {
         if (photo !== undefined && photo !== null) {
             dessertPhotos.push(photo.link);
         } else {
-            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${Bun.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`);
+            const ruokakuva = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=c2aa933ac7fce44db&searchType=image&q=${trim}`);
             const data = await ruokakuva.json();
             if (!data.items[0].link.startsWith("http")) {
                 dessertPhotos.push("https://i.imgur.com/ME4Ef.jpeg");

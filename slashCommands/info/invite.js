@@ -8,7 +8,7 @@ module.exports = {
 	userPerms: ['Administrator'],
 	botPerms: ['Administrator'],
 	run: async (client, interaction) => {
-		const inviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${Bun.env.CLIENT_ID}&permissions=8&scope=bot%20applications.commands`;
+		const inviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${process.env.CLIENT_ID}&permissions=8&scope=bot%20applications.commands`;
 		const embed = new EmbedBuilder()
 			.setTitle('Invite me')
 			.setDescription(`Invite the bot to your server. [Click here](${inviteUrl})`)

@@ -1,4 +1,4 @@
-const fs = require('node:fs');
+const fs = require('fs');
 const chalk = require('chalk');
 
 const { PermissionsBitField } = require('discord.js');
@@ -8,14 +8,14 @@ const { REST } = require('@discordjs/rest')
 const AsciiTable = require('ascii-table');
 const table = new AsciiTable().setHeading('Slash Commands', 'Stats').setBorder('|', '=', "0", "0")
 
-const TOKEN = Bun.env.TOKEN;
-const CLIENT_ID = Bun.env.CLIENT_ID;
-const GUILD_ID = Bun.env.GUILD_ID;
+const TOKEN = process.env.TOKEN;
+const CLIENT_ID = process.env.CLIENT_ID;
 
 const rest = new REST({ version: '9' }).setToken(TOKEN);
 
 module.exports = (client) => {
 	const slashCommands = [];
+
 	fs.readdirSync('./slashCommands/').forEach(async dir => {
 		const files = fs.readdirSync(`./slashCommands/${dir}/`).filter(file => file.endsWith('.js'));
 
