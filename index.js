@@ -1,7 +1,8 @@
 require('dotenv').config()
-const { Client, GatewayIntentBits, Partials, Collection, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, Collection, ActivityType } = require('discord.js');
 const { MongoClient } = require('mongodb');
 const DBclient = new MongoClient(process.env.MONGODB_URI);
+const config = require('./json/config.json');
 DBclient.connect();
 const client = new Client({
 	intents: [
@@ -15,7 +16,11 @@ const client = new Client({
 		GatewayIntentBits.GuildMessageTyping,
 		GatewayIntentBits.GuildIntegrations
 	],
-	partials: [Partials.Channel, Partials.Message, Partials.User, Partials.GuildMember, Partials.Reaction]
+	partials: [Partials.Channel, Partials.Message, Partials.User, Partials.GuildMember, Partials.Reaction],
+	presence: {
+		activities: [{ name: config.presence["MESSAGE"], type: ActivityType.Playing }],
+		status: config.presence["STATUS"],
+	}
 });
 
 const DBname = process.env.DB_NAME
