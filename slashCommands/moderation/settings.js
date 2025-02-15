@@ -1,5 +1,5 @@
-const { ActionRowBuilder, Events, StringSelectMenuBuilder, EmbedBuilder, ApplicationCommandType } = require('discord.js');
-const { DBclient, DBname } = require('../..');
+import { ActionRowBuilder, StringSelectMenuBuilder, EmbedBuilder, ApplicationCommandType } from 'discord.js';
+import { DBclient, DBname } from '../..';
 
 
 async function CheckIfGuildHasDB(id) {
@@ -45,7 +45,7 @@ async function CheckIfGuildHasDB(id) {
 
 }
 
-module.exports = {
+export const settings = {
     name: 'settings',
     description: "Update the settings of the server",
     cooldown: 3000,

@@ -1,13 +1,33 @@
-const fs = require('fs');
-const chalk = require('chalk');
-let AsciiTable = require('ascii-table')
-let table = new AsciiTable()
-table.setHeading('Events', 'Stats').setBorder('|', '=', "0", "0")
+import fs from 'node:fs';
+import chalk from 'chalk';
+import AsciiTable from 'ascii-table';
+import config from '../json/config.json';
 
-module.exports = (client) => {
-	fs.readdirSync('./events/').filter((file) => file.endsWith('.js')).forEach((event) => {
-		require(`../events/${event}`);
-		table.addRow(event.split('.js')[0], '✅')
-	})
-	console.log(chalk.greenBright(table.toString()))
+const table = new AsciiTable().setHeading('Events', 'Status').setBorder('|', '=', "0", "0");
+
+const loadEvents = async (client, dir) => {
+	const files = fs.readdirSync(`./events/${dir}/`).filter(file => file.endsWith('.js'));
+
+	for (const file of files) {
+		try {
+			const event = await import(`../events/${dir}/${file}`);
+			const eventName = event.default.name || file.split('.js')[0];
+			if (event.default.once) {
+				client.once(eventName, (...args) => event.default.execute(...args, client, config));
+			} else {
+				client.on(eventName, (...args) => event.default.execute(...args, client, config));
+			}
+			table.addRow(file.split('.js')[0], '✅');
+		} catch (error) {
+			table.addRow(file.split('.js')[0], `⛔ ${error.message}`);
+		}
+	}
+};
+
+export default async (client) => {
+	const dirs = fs.readdirSync('./events/').filter(dir => fs.lstatSync(`./events/${dir}`).isDirectory());
+
+	await Promise.all(dirs.map(dir => loadEvents(client, dir)));
+
+	console.log(chalk.greenBright(table.toString()));
 };

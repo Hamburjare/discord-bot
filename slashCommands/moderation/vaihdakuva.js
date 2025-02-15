@@ -1,5 +1,5 @@
-const { EmbedBuilder, ApplicationCommandType } = require('discord.js');
-const { DBclient, DBname } = require('../..');
+import { EmbedBuilder, ApplicationCommandType } from 'discord.js';
+import { DBclient, DBname } from '../..';
 
 function validURL(str) {
     var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
@@ -11,7 +11,7 @@ function validURL(str) {
     return !!pattern.test(str);
 }
 
-module.exports = {
+export const vaihdakuva = {
     name: 'vaihdakuva',
     description: "Vaihda virheellisiä ruoka kuvia",
     type: ApplicationCommandType.ChatInput,

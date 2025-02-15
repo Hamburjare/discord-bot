@@ -1,9 +1,9 @@
-const { client, DBclient, DBname } = require('..');
+const { client, DBclient, DBname } = require('../..');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, ChannelType } = require('discord.js');
 const database = DBclient.db(DBname);
 const collection = database.collection("server-config");
 
-async function LinkLand(interaction) {
+export async function LinkLand(interaction) {
     try {
         const filter = { _id: interaction.guild.id };
         const result = await collection.findOne(filter);
@@ -136,7 +136,7 @@ async function LinkLand(interaction) {
 
 }
 
-async function Bullying(interaction) {
+export async function Bullying(interaction) {
     try {
         const filter = { _id: interaction.guild.id };
         const result = await collection.findOne(filter);
@@ -189,28 +189,29 @@ async function Bullying(interaction) {
     }
 
 }
-module.exports = { LinkLand, Bullying }
 
-client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isStringSelectMenu()) return;
-    try {
+export default {
+    name: 'interactionCreate',
+    once: false,
+    async execute(interaction) {
+        if (!interaction.isStringSelectMenu()) return;
+        try {
 
-        if (interaction.customId === 'settings') {
+            if (interaction.customId === 'settings') {
 
-            switch (interaction.values[0]) {
-                case 'linkland':
-                    LinkLand(interaction);
-                    break;
-                case 'bullying':
-                    Bullying(interaction);
-                    break;
+                switch (interaction.values[0]) {
+                    case 'linkland':
+                        LinkLand(interaction);
+                        break;
+                    case 'bullying':
+                        Bullying(interaction);
+                        break;
+                }
             }
+
         }
-
+        catch (err) {
+            console.log(err.stack);
+        }
     }
-    catch (err) {
-        console.log(err.stack);
-    }
-
-
-});
+}

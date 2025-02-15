@@ -1,5 +1,6 @@
-const { EmbedBuilder, ApplicationCommandType } = require('discord.js');
-module.exports = {
+import { EmbedBuilder, ApplicationCommandType } from 'discord.js';
+
+export const avatar = {
     name: 'avatar',
     description: "Näytä avatar",
     cooldown: 3000,
@@ -20,10 +21,10 @@ module.exports = {
             .setTitle("**Avatar**")
             .setImage(user.displayAvatarURL({
                 dynamic: true,
-              }))
+            }))
             .setDescription(`${user}`)
             .setColor("#2F3136")
-        return interaction.reply({ embeds: [avatar]})
+        return interaction.reply({ embeds: [avatar] })
     }
 
 };

@@ -1,6 +1,8 @@
-const { client, DBclient, DBname } = require('..');
-const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
-const { LinkLand } = require('./selectMenu.js');
+import { DBclient, DBname } from '../../index.js';
+import { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
+import { LinkLand } from './selectMenu.js';
+
+
 const database = DBclient.db(DBname);
 const collection = database.collection("server-config");
 var filter = undefined;
@@ -280,19 +282,20 @@ async function Buttons(interaction) {
 
 }
 
+export default {
+    name: 'interactionCreate',
+    once: false,
+    async execute(interaction) {
+        if (!interaction.isButton) return;
+        try {
+            filter = { _id: interaction.guild.id };
+            result = await collection.findOne(filter);
 
-client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isButton) return;
-    try {
-        filter = { _id: interaction.guild.id };
-        result = await collection.findOne(filter);
+            Buttons(interaction);
 
-        Buttons(interaction);
-
+        }
+        catch (err) {
+            console.log(err.stack);
+        }
     }
-    catch (err) {
-        console.log(err.stack);
-    }
-
-
-});
+}

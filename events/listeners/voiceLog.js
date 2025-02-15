@@ -1,13 +1,15 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandType, ButtonStyle } = require('discord.js');
-const {client, DBclient} = require('..');
+import { EmbedBuilder } from 'discord.js';
 
-client.on("voiceStateUpdate", (oldMember, newMember) => {
+export default {
+  name: 'voiceStateUpdate',
+  once: false,
+  execute(oldMember, newMember, client) {
     let newUserChannel = newMember.channelId;
     let oldUserChannel = oldMember.channelId;
     let channel = client.channels.cache.get("895331191677394944");
-  
+
     if (newMember.guild.id !== "784380611900604426") return;
-  
+
     if (oldUserChannel === null) {
       const viesti = new EmbedBuilder()
         .setTitle("**Käyttäjä joinas**")
@@ -18,7 +20,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         })
         .setColor("#2F3136")
         .setTimestamp();
-      channel.send({embeds: [viesti]});
+      channel.send({ embeds: [viesti] });
     } else if (newUserChannel === null) {
       const viesti = new EmbedBuilder()
         .setTitle("**Käyttäjä lähti**")
@@ -31,7 +33,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         })
         .setColor("#2F3136")
         .setTimestamp();
-      channel.send({embeds: [viesti]});
+      channel.send({ embeds: [viesti] });
     } else {
       if (newUserChannel === oldUserChannel) return;
       const viesti = new EmbedBuilder()
@@ -49,6 +51,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
         })
         .setColor("#2F3136")
         .setTimestamp();
-      channel.send({embeds: [viesti]});
+      channel.send({ embeds: [viesti] });
     }
-  });
+  }
+}

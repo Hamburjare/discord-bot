@@ -1,6 +1,7 @@
-const { client, DBclient, DBname } = require('..');
-const { LinkLand, Bullying} = require('./selectMenu.js');
-const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle, ChannelType } = require('discord.js');
+import { DBclient, DBname } from '../../index.js';
+import { LinkLand, Bullying } from './selectMenu.js';
+import { ChannelType } from 'discord.js';
+
 const database = DBclient.db(DBname);
 const collection = database.collection("server-config");
 const options = { upsert: true };
@@ -160,7 +161,7 @@ async function RemoveUser(interaction) {
     if (users.length < 1) return interaction.reply({ content: 'No valid users found!', ephemeral: true });
 
     await collection.updateOne(filter, { $pull: { "linkland.allowedUsers": { $in: users } } }, options);
-    
+
     LinkLand(interaction);
 }
 
@@ -168,14 +169,14 @@ async function UpdateCategory(interaction) {
     const category = interaction.fields.getTextInputValue('categoryId');
     const categoryCheck = interaction.guild.channels.cache.find(channel => channel.id === category && channel.type === ChannelType.GuildCategory)
     if (!categoryCheck) return interaction.reply({ content: 'Invalid category!', ephemeral: true });
-    await collection.updateOne(filter, { $set: {  "bullying.category": category } }, options);
+    await collection.updateOne(filter, { $set: { "bullying.category": category } }, options);
     Bullying(interaction);
 }
 
 async function UpdateLogChannel(interaction) {
     const channel = interaction.fields.getTextInputValue('logChannelId');
     if (!interaction.guild.channels.cache.get(channel)) return interaction.reply({ content: 'Invalid channel!', ephemeral: true });
-    await collection.updateOne(filter, { $set: {  "admins.logChannel": channel } }, options);
+    await collection.updateOne(filter, { $set: { "admins.logChannel": channel } }, options);
     Bullying(interaction);
 }
 
@@ -232,22 +233,22 @@ async function bullyingModalHandler(interaction) {
     }
 }
 
+export default {
+    name: 'interactionCreate',
+    once: false,
+    async execute(interaction) {
+        if (!interaction.isModalSubmit) return;
+        try {
 
+            filter = { _id: interaction.guild.id };
+            result = await collection.findOne(filter);
 
-client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isModalSubmit) return;
-    try {
+            linklandModalHandler(interaction);
+            bullyingModalHandler(interaction);
 
-        filter = { _id: interaction.guild.id };
-        result = await collection.findOne(filter);
-
-        linklandModalHandler(interaction);
-        bullyingModalHandler(interaction);
-
+        }
+        catch (err) {
+            console.log(err.stack);
+        }
     }
-    catch (err) {
-        console.log(err.stack);
-    }
-
-
-});
+}

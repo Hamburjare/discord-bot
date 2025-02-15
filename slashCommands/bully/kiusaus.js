@@ -1,8 +1,9 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandType, ButtonStyle, ChannelType, PermissionsBitField } = require('discord.js');
-const { client, DBclient, DBname} = require('../..');
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandType, ButtonStyle, PermissionsBitField } from 'discord.js';
+import { DBclient, DBname } from '../..';
+
 let pingaan = false;
 let pingihelvetti;
-module.exports = {
+export const kiusaus = {
     name: 'kiusaa',
     description: "Kiusaa muita",
     cooldown: 3000,

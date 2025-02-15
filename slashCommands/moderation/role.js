@@ -1,6 +1,6 @@
-const { EmbedBuilder, ApplicationCommandType } = require('discord.js');
+import { EmbedBuilder, ApplicationCommandType } from 'discord.js';
 
-module.exports = {
+export const role = {
 	name: 'role',
 	description: "Manage roles of the server or members.",
 	cooldown: 3000,

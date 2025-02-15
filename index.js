@@ -1,6 +1,5 @@
-require('dotenv').config()
-const { Client, GatewayIntentBits, Partials, Collection, ActivityType } = require('discord.js');
-const { MongoClient } = require('mongodb');
+import { Client, GatewayIntentBits, Partials, Collection, ActivityType } from 'discord.js';
+import { MongoClient } from 'mongodb';
 const DBclient = new MongoClient(process.env.MONGODB_URI);
 const config = require('./json/config.json');
 DBclient.connect();
@@ -23,16 +22,19 @@ const client = new Client({
 	}
 });
 
-const DBname = process.env.DB_NAME
+const DBname = Bun.env.DB_NAME
 
 
-client.commands = new Collection()
-client.aliases = new Collection()
+client.commands = new Collection();
+client.aliases = new Collection();
 client.slashCommands = new Collection();
-module.exports = { client, DBclient, DBname};
 
-['slashCommand', 'events'].forEach((handler) => {
-	require(`./handlers/${handler}`)(client)
+const handlers = ['slashCommand', 'events'];
+handlers.forEach(async (handler) => {
+    const module = await import(`./handlers/${handler}.js`);
+    module.default(client);
 });
 
-client.login(process.env.TOKEN)
+client.login(Bun.env.TOKEN);
+
+export { client, DBclient, DBname };

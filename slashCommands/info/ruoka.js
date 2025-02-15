@@ -1,6 +1,6 @@
-const { EmbedBuilder, ApplicationCommandType } = require('discord.js');
-const { DBclient, DBname } = require('../..');
-const fetch = require('node-fetch');
+import { EmbedBuilder, ApplicationCommandType } from 'discord.js';
+import { DBclient, DBname } from '../..';
+
 const db = DBclient.db(DBname);
 const collection = db.collection("food-pics");
 var options = { upsert: true };
@@ -114,7 +114,7 @@ async function getDessertPhotos() {
     }
 }
 
-module.exports = {
+export const ruoka = {
     name: 'päivänruoka',
     description: "Katso mitä on ruokana tänään",
     type: ApplicationCommandType.ChatInput,

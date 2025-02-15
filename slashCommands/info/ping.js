@@ -1,6 +1,6 @@
-const { ApplicationCommandType } = require('discord.js');
+import { ApplicationCommandType } from 'discord.js';
 
-module.exports = {
+export const ping = {
 	name: 'ping',
 	description: "Tarkista botin viive",
 	type: ApplicationCommandType.ChatInput,

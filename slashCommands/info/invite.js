@@ -1,6 +1,6 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandType, ButtonStyle } = require('discord.js');
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandType, ButtonStyle } from 'discord.js';
 
-module.exports = {
+export const invite = {
 	name: 'invite',
 	description: "Get the bot's invite link",
 	cooldown: 3000,
