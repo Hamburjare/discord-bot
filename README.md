@@ -1,6 +1,7 @@
 # Self-hosted discord bot
 
 ## Contents
+
 - [Self-hosted discord bot](#self-hosted-discord-bot)
   - [Contents](#contents)
   - [Installation](#installation)
@@ -10,11 +11,13 @@
 ## Installation
 
 ### Docker
+
 1. Clone the repository
 2. [Install Docker](https://docs.docker.com/get-docker/)
 3. [Install Docker Compose](https://docs.docker.com/compose/install/)
 4. Create file named `.env` in the root directory of the project
 5. Paste the following code to the `.env` file
+
    ```bash
    TOKEN=
    CLIENT_ID=
@@ -22,6 +25,7 @@
    MONGODB_URI=
    DB_NAME=<database name>
    ```
+
    1. Create name for the database and replace `<database name>` with it at `DB_NAME`
 6. Create an account on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
       1. Follow [MongoDB Atlas Getting Started](https://www.mongodb.com/docs/atlas/getting-started/)
@@ -41,36 +45,41 @@
       1. Copy the application id and paste it to `CLIENT_ID` in `.env` file
    5. [Create API Key to Google Custom Search Engine](https://developers.google.com/custom-search/v1/overview)
    6. Copy the API key and paste it to `GOOGLE_API` in `.env` file
-2.  Invite the bot to your server
+2. Invite the bot to your server
        1. Navigate to the OAuth2 page
        2. Select bot from the scopes
        3. Select the permissions you want to give the bot
        4. Copy the generated link and open it in your browser
        5. Select the server you want to add the bot to
        6. Click Authorize
-3.  Configure presence of the bot
-       1.  Open `json/config.json` file
-       2.  There you can change bot's Activity status and message
-       3.  Activity status: `online`, `idle`, `dnd` (do not disturb), `invisible`
-       4.  To change bot's Activity type open `events/ready.js` file
-           1.  In line 9 you can change the type of the Activity example ActivityType.Playing to ActivityType.Watching
-           2.  Activity types are: `Playing`, `Streaming`, `Listening`, `Watching`, `Competing`
+3. Configure presence of the bot
+       1. Open `json/config.json` file
+       2. There you can change bot's Activity status and message
+       3. Activity status: `online`, `idle`, `dnd` (do not disturb), `invisible`
+       4. To change bot's Activity type open `events/ready.js` file
+           1. In line 9 you can change the type of the Activity example ActivityType.Playing to ActivityType.Watching
+           2. Activity types are: `Playing`, `Streaming`, `Listening`, `Watching`, `Competing`
 
-4.   To start the bot run the following command in the root directory of the project
+4. To start the bot run the following command in the root directory of the project
+
 ```bash
-docker compose up -d --no-deps --build
-``` 
-
+docker compose up -d
+```
 
 ## Usage
+
 1. To restart the bot run the following command in the root directory of the project
+
 ```bash
-docker compose up -d --no-deps --build
+docker compose restart 
 ```
+
 2. To stop the bot run the following command in the root directory of the project
+
 ```bash
 docker compose down
 ```
+
 3. To add new commands
    1. Create new file in `commands` directory
    2. Copy the following code to the file
@@ -90,10 +99,12 @@ docker compose down
 
    };
    ```
+
    3. Replace `name` with the name of the command
    4. Replace `description` with the description of the command
    5. Add options if you want to under `type`
-   ```js 
+
+   ```js
    options: [
         {
             name: '',
@@ -102,10 +113,11 @@ docker compose down
         }
     ],
    ```
-   6. Put the code you want to execute when the command is called in the `run` function 
-   
+
+   6. Put the code you want to execute when the command is called in the `run` function
+
       [Discord.js documentation](https://discord.js.org/#/docs/discord.js/main/general/welcome)
-      
+
       [Discord.js Guide](https://discordjs.guide/#before-you-begin)
    7. Save the file
    8. Restart the bot to apply the changes (see [Usage](#usage) step 1)
