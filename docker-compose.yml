@@ -2,7 +2,6 @@ services:
   app:
     image: oven/bun
     container_name: discord-bot
-    env_file: .env
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
